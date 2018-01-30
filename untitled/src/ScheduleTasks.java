@@ -26,7 +26,6 @@ public class ScheduleTasks {
         ArrayList<String> stringBuffer = new ArrayList<String>();
         String line;
         try {
-
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while ((line = bufferedReader.readLine()) != null) {
@@ -50,14 +49,17 @@ public class ScheduleTasks {
                         System.out.println("Inputting name...");
                     i++;
                     currentString = stringBuffer.get(i);
+
                     if (currentString.length() != 0) {
                         if (DEBUG)
                             System.out.println("name set to: " + currentString);
                         aName = (currentString);
-                    } else {
+                    }
+                    else {
                         System.out.println("Invalid name");
                         return;
                     }
+
                     i++;
                     break;
                 case "forced partial assignment:":
