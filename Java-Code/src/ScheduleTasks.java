@@ -22,6 +22,7 @@ public class ScheduleTasks {
 
     public static void main(String args[]) {
 
+        // Read file and put it into an array
         File file = new File("sample.txt");
         ArrayList<String> stringBuffer = new ArrayList<String>();
         String line;
