@@ -1,8 +1,8 @@
 public class MachineTaskPair {
     private int machine;
-    private String task;
+    private int task;
 
-    public MachineTaskPair (int machine, String task) {
+    public MachineTaskPair (int machine, int task) {
         this.machine = machine;
         this.task = task;
     }
@@ -11,7 +11,7 @@ public class MachineTaskPair {
         return this.machine;
     }
 
-    String getTask() {
+    int getTask() {
         return this.task;
     }
 }
