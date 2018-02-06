@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Schedule {
     final static boolean DEBUG = Test.DEBUG;
@@ -13,6 +14,7 @@ public class Schedule {
     private ArrayList<TaskTaskPair> tooNearTasks = new ArrayList<TaskTaskPair>();
     private int[][] machinePenalties = new int[8][8];
     private ArrayList<TooNearPenalty> tooNearPenalties = new ArrayList<TooNearPenalty>();
+    public ArrayList<Node> terminalCollection = new ArrayList<Node>();
 
     public Schedule(String pathname) {
 
@@ -169,7 +171,7 @@ public class Schedule {
                         String[] values = newString.split(",");
                         if (DEBUG)
                             System.out.println("Splitted: " + values[0] + " " + values[1] + " " + values[2]);
-                        TooNearPenalty tnp = new TooNearPenalty(values[0], values[1], Integer.valueOf(values[2]));
+                        TooNearPenalty tnp = new TooNearPenalty(toIntNumber(values[0]), toIntNumber(values[1]), Integer.valueOf(values[2]));
                         tooNearPenalties.add(tnp);
                         i++;
                         if (i < stringBuffer.size())
@@ -272,5 +274,166 @@ public class Schedule {
 
     public void setTooNearPenalties(ArrayList<TooNearPenalty> tooNearPenalties) {
         this.tooNearPenalties = tooNearPenalties;
+    }
+
+    class Node {
+
+
+        final static boolean DEBUG = Test.DEBUG;
+
+        private Node parent;
+        private int cost;
+        private int level;
+        private List<Node> children = new ArrayList<Node>(); 			//Does this need to have its type changed?
+        public List<Integer> currentSet;
+        private int task;
+        /**
+         * The null node, used as the level 0/starting point of the tree
+         */
+        public Node() {
+            System.out.println();
+            this.level = 0;
+            this.cost = 0;
+            currentSet = new ArrayList<Integer>();
+            currentSet.add(1);
+            currentSet.add(2);
+            currentSet.add(3);
+            currentSet.add(4);
+            //currentSet.add(5);
+            //currentSet.add(6);
+            //currentSet.add(7);
+            //currentSet.add(8);
+            genChildren();
+
+        }
+
+        /**
+         * Constructor for nodes
+         * @param parent The node before the current level
+         * @param task
+         * @param currentSet
+         * @param level The current level
+         *
+         */
+        public Node(Node parent, int task, List<Integer> currentSet, int level, int cost) {
+            this.parent = parent;
+            this.task = task;
+            this.currentSet = new ArrayList<Integer>(currentSet);
+            this.level = level;
+            this.cost = cost;
+            System.out.println("Machine: " + level + " Task: " + task);
+            genChildren();
+            if (this.level==4)
+                terminalCollection.add(this);
+
+        }
+
+        /*
+         * Getter for parent of the given node
+         */
+        public Node getParent() {
+            return parent;
+        }
+        /*
+         * Getter for cost of the given node
+         */
+        public int getCost() {
+            return cost;
+        }
+        /*
+         * Getter for level of the given node
+         */
+        public int getLevel() {
+            return level;
+        }
+        /*
+         *Returns the array up to the point it is called
+         */
+        public int[] path(int[] path, int level){
+
+            return path;
+        }
+        public void genChildren(){
+            if (level!=0) {
+                currentSet.remove((currentSet.indexOf(this.task)));
+            }
+
+            //Partial Assign Constraint
+            int assignTask = 0;
+            for (int i=0; i<partialAssignments.size(); i++) {
+                if (level+1==partialAssignments.get(i).getMachine()) {
+                    if (DEBUG) System.out.println(i + " " + level);
+                    assignTask = partialAssignments.get(i).getTask();
+                    break;
+                }
+            }
+
+            //Forbidden Machines
+            int forbiddenTask = 0;
+            for (int i=0; i<forbiddenMachines.size(); i++) {
+                if (level+1==forbiddenMachines.get(i).getMachine()) {
+                    forbiddenTask = forbiddenMachines.get(i).getTask();
+                }
+            }
+
+            List<Integer> tnTasks = new ArrayList<Integer>();
+            for (int i=0; i<tooNearTasks.size(); i++) {
+                TaskTaskPair tempTTP = tooNearTasks.get(i);
+                if (task==tempTTP.getTask1())
+                    tnTasks.add(tempTTP.getTask2());
+                else if (task==tempTTP.getTask2())
+                    tnTasks.add(tempTTP.getTask1());
+                else;
+            }
+
+            //System.out.println("here");
+
+
+
+            for (int i=0; i<4-level;i++) {
+                if (assignTask != currentSet.get(i) && assignTask!=0) //Partial Assign Constraint
+                    continue;
+
+                if (forbiddenTask == currentSet.get(i) && forbiddenTask!=0) //Forbidden Machines
+                    continue;
+
+                if (tnTasks.contains(currentSet.get(i))) //Too near Tasks
+                    continue;
+
+                int tempPenalty = 0;
+
+                if (level!=0) {
+                    TooNearPenalty tempTNP;
+                    for (int j=0;j<tooNearPenalties.size();j++) {
+                        if ((task == tooNearPenalties.get(j).getTask1()) && (currentSet.get(i) == tooNearPenalties.get(j).getTask2())) {
+                            tempPenalty = tooNearPenalties.get(j).getPenalty();
+                            break;
+                        }
+
+                        else if((task == tooNearPenalties.get(j).getTask2()) && (currentSet.get(i) == tooNearPenalties.get(j).getTask1())) {
+                            tempPenalty = tooNearPenalties.get(j).getPenalty();
+                            break;
+                        }
+                        else;
+                    }
+                }
+
+
+
+
+                if (DEBUG) {
+                    System.out.println("Cost: " + cost +
+                                        " Temp Penalty " + tempPenalty +
+                                        " Current: " + machinePenalties[level][currentSet.get(i)-1]);
+                }
+
+                Node aNode = new Node(this, currentSet.get(i), currentSet, level+1, cost+tempPenalty+machinePenalties[level][currentSet.get(i)-1]);
+
+                children.add(aNode);
+            }
+
+
+
+        }
     }
 }
