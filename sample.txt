@@ -2,14 +2,10 @@ Name:
 aName1
 
 forced partial assignment:
-(1,D)
-(3,C)
-(2,B)
 
 forbidden machine:
 
 too-near tasks:
-(A,B)
 
 machine penalties:
 1 1 1 1 1 1 1 1
@@ -21,7 +17,4 @@ machine penalties:
 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1
 
-
 too-near penalties:
-(D,B,12)
-(B,C,10)

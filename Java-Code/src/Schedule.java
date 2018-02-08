@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Schedule {
@@ -85,7 +86,7 @@ public class Schedule {
                         int taskNum = toIntNumber(values[1]);
                         if (taskNum > 8 || taskNum < 1)
                             throw new PartialAssignmentError("" +
-                                    "partial assignment error: Invalid task");
+                                    "partial assignment error: Invalid task" + taskNum);
 
 
                         // Check if there is duplicate machine, and throw an error
@@ -277,49 +278,27 @@ public class Schedule {
         return aName;
     }
 
-    public void setaName(String aName) {
-        this.aName = aName;
-    }
-
     public ArrayList<MachineTaskPair> getPartialAssignments() {
         return partialAssignments;
-    }
-
-    public void setPartialAssignments(ArrayList<MachineTaskPair> partialAssignments) {
-        this.partialAssignments = partialAssignments;
     }
 
     public ArrayList<MachineTaskPair> getForbiddenMachines() {
         return forbiddenMachines;
     }
 
-    public void setForbiddenMachines(ArrayList<MachineTaskPair> forbiddenMachines) {
-        this.forbiddenMachines = forbiddenMachines;
-    }
-
     public ArrayList<TaskTaskPair> getTooNearTasks() {
         return tooNearTasks;
-    }
-
-    public void setTooNearTasks(ArrayList<TaskTaskPair> tooNearTasks) {
-        this.tooNearTasks = tooNearTasks;
     }
 
     public int[][] getMachinePenalties() {
         return machinePenalties;
     }
 
-    public void setMachinePenalties(int[][] machinePenalties) {
-        this.machinePenalties = machinePenalties;
-    }
-
     public ArrayList<TooNearPenalty> getTooNearPenalties() {
         return tooNearPenalties;
     }
 
-    public void setTooNearPenalties(ArrayList<TooNearPenalty> tooNearPenalties) {
-        this.tooNearPenalties = tooNearPenalties;
-    }
+    public ArrayList<Node> getTerminalCollection() {return terminalCollection; }
 
     class Node {
 
@@ -329,6 +308,11 @@ public class Schedule {
         private Node parent;
         private int cost;
         private int level;
+
+        public List<Node> getChildren() {
+            return children;
+        }
+
         private List<Node> children = new ArrayList<Node>(); 			//Does this need to have its type changed?
         public List<Integer> currentSet;
         private int task;
@@ -366,11 +350,10 @@ public class Schedule {
             this.currentSet = new ArrayList<Integer>(currentSet);
             this.level = level;
             this.cost = cost;
-            System.out.println("Machine: " + level + " Task: " + task);
+            if (DEBUG) System.out.println("Machine: " + level + " Task: " + task);
             genChildren();
             if (this.level==4)
                 terminalCollection.add(this);
-
         }
 
         /*
@@ -431,10 +414,6 @@ public class Schedule {
                 else;
             }
 
-            //System.out.println("here");
-
-
-
             for (int i=0; i<4-level;i++) {
                 if (assignTask != currentSet.get(i) && assignTask!=0) //Partial Assign Constraint
                     continue;
@@ -479,6 +458,13 @@ public class Schedule {
 
 
 
+        }
+
+        public String toString() {
+            String output = "";
+
+            output += this.level + " " + this.task;
+            return output;
         }
     }
 }

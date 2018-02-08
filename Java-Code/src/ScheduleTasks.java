@@ -15,7 +15,25 @@ public class ScheduleTasks extends Schedule {
     public void optimalSolution () {
         Node aNode = new Node();
         super.getaName();
-        System.out.println(super.terminalCollection.get(0).getCost());
+        int lowCost = 1000000000;
+        for (int i = 0; i< super.terminalCollection.size(); i++) {
+            System.out.println(super.terminalCollection.get(i).toString());
+            System.out.println(super.terminalCollection.get(i).getParent());
+            System.out.println(super.terminalCollection.get(i).getParent().getParent());
+            System.out.println(super.terminalCollection.get(i).getParent().getParent().getParent());
+            int tempLowCost = super.terminalCollection.get(i).getCost();
+            if (lowCost>tempLowCost) lowCost = tempLowCost;
+            System.out.println(super.terminalCollection.get(i).getCost());
+            System.out.println(i + " | " + lowCost);
+
+
+            System.out.println("New Machine");
+        }
+
+
+
+
+
     }
 
 

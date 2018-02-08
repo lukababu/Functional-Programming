@@ -1,6 +1,6 @@
 [*] Conflicting Partial Assign
-[ ] Check for illegal ttp (ex (A, A))
-[ ] Parse solution
+[*] Check for illegal ttp (ex (A, A))
+[*] Parse solution
 [ ] Output file
 [ ] Lowest Cost Solution
 [ ] Path - reverse
