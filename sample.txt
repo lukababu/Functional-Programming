@@ -3,6 +3,7 @@ aName1
 
 forced partial assignment:
 (1,D)
+(3,C)
 (2,B)
 
 forbidden machine:

@@ -16,7 +16,7 @@ public class Schedule {
     private ArrayList<TooNearPenalty> tooNearPenalties = new ArrayList<TooNearPenalty>();
     public ArrayList<Node> terminalCollection = new ArrayList<Node>();
 
-    public Schedule(String pathname) {
+    public Schedule(String pathname) throws IOException {
 
         // Read file and put it into an array
         File file = new File(pathname);
@@ -63,6 +63,9 @@ public class Schedule {
                         System.out.println("inputting forced partial assignments...");
                     i++;
                     currentString = stringBuffer.get(i);
+
+                    boolean[] availableMach = new boolean[]{true, true, true, true, true, true, true, true};
+                    boolean[] availableTask = new boolean[]{true, true, true, true, true, true, true, true};
                     while (currentString.length() != 0) {
                         if (DEBUG)
                             System.out.println("Current string:" + currentString);
@@ -71,8 +74,37 @@ public class Schedule {
                             System.out.println("New string: " + newString);
                         String[] values = newString.split(",");
                         if (DEBUG)
-                            System.out.println("Splitted: " + values[0] + " " + values[1]);
+                            System.out.println("Spitted: " + values[0] + " " + values[1]);
+
+                        // Check if there is an invalid machine
+                        int machineNum = Integer.valueOf(values[0]);
+                        if (machineNum > 8 || machineNum < 1) throw new PartialAssignmentError("" +
+                                "partial assignment error: Invalid machine");
+
+                        // Check if there is an invalid task
+                        int taskNum = toIntNumber(values[1]);
+                        if (taskNum > 8 || taskNum < 1)
+                            throw new PartialAssignmentError("" +
+                                    "partial assignment error: Invalid task");
+
+
+                        // Check if there is duplicate machine, and throw an error
+                        if (availableMach[Integer.valueOf(values[0])-1])
+                            availableMach[Integer.valueOf(values[0])-1] = false;
+                        else throw new PartialAssignmentError("" +
+                                "partial assignment error: duplicate machine");
+
+
+                        // Check if there is duplicate task, and throw an error
+                        if (availableTask[toIntNumber(values[1])-1])
+                            availableTask[toIntNumber(values[1])-1] = false;
+                        else {
+                            throw new PartialAssignmentError("partial assignment error: duplicate task");
+                        }
+
                         MachineTaskPair mtp = new MachineTaskPair(Integer.valueOf(values[0]), toIntNumber(values[1]));
+
+
                         partialAssignments.add(mtp);
                         i++;
                         currentString = stringBuffer.get(i);
@@ -226,6 +258,19 @@ public class Schedule {
         if (input.equals("H")) return 8;
 
         return -1;
+    }
+
+    private char toLetter(int input) {
+        if (input == 1) return 'A';
+        if (input == 2) return 'B';
+        if (input == 3) return 'C';
+        if (input == 4) return 'D';
+        if (input == 5) return 'E';
+        if (input == 6) return 'F';
+        if (input == 7) return 'G';
+        if (input == 8) return 'H';
+
+        return 'Z';
     }
 
     public String getaName() {

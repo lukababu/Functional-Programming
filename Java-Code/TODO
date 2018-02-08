@@ -1,4 +1,4 @@
-[ ] Conflicting Partial Assign
+[*] Conflicting Partial Assign
 [ ] Check for illegal ttp (ex (A, A))
 [ ] Parse solution
 [ ] Output file

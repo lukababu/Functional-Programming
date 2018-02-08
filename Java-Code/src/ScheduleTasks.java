@@ -7,9 +7,8 @@ import java.io.File;
 
 public class ScheduleTasks extends Schedule {
     final static boolean DEBUG = Test.DEBUG;
-    final static String pathname = "sample.txt";
 
-    public ScheduleTasks() {
+    public ScheduleTasks(String pathname) throws IOException {
         super(pathname);
     }
 
