@@ -328,12 +328,11 @@ public class Schedule {
             currentSet.add(2);
             currentSet.add(3);
             currentSet.add(4);
-            //currentSet.add(5);
-            //currentSet.add(6);
-            //currentSet.add(7);
-            //currentSet.add(8);
+            currentSet.add(5);
+            currentSet.add(6);
+            currentSet.add(7);
+            currentSet.add(8);
             genChildren();
-
         }
 
         /**
@@ -352,7 +351,7 @@ public class Schedule {
             this.cost = cost;
             if (DEBUG) System.out.println("Machine: " + level + " Task: " + task);
             genChildren();
-            if (this.level==4)
+            if (this.level==8)
                 terminalCollection.add(this);
         }
 
@@ -414,7 +413,7 @@ public class Schedule {
                 else;
             }
 
-            for (int i=0; i<4-level;i++) {
+            for (int i=0; i<8-level;i++) {
                 if (assignTask != currentSet.get(i) && assignTask!=0) //Partial Assign Constraint
                     continue;
 
@@ -463,7 +462,8 @@ public class Schedule {
         public String toString() {
             String output = "";
 
-            output += this.level + " " + this.task;
+            output += toLetter(this.task);
+
             return output;
         }
     }

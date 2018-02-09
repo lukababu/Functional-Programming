@@ -13,8 +13,6 @@ public class Output {
         byte[] strToBytes = str.getBytes();
 
         Files.write(path, strToBytes);
-
-        //String read = Files.readAllLines(path).get(0);
     }
 
 }
