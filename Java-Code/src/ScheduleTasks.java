@@ -9,11 +9,11 @@ import java.io.File;
 
 public class ScheduleTasks extends Schedule {
     final static boolean DEBUG = Test.DEBUG;
-    private static final String FILENAME = "Output.txt";
+    private String outputFile;
 
-
-    public ScheduleTasks(String pathname) throws IOException {
-        super(pathname);
+    public ScheduleTasks(String inputFile, String outputFile) throws IOException {
+        super(inputFile, outputFile);
+        setOutputFile(outputFile);
     }
 
     public void optimalSolution () throws IOException {
@@ -22,22 +22,36 @@ public class ScheduleTasks extends Schedule {
         int lowCost = 1000000000;
         int lowi = 0;
         for (int i = 0; i< super.terminalCollection.size(); i++) {
-            System.out.println(super.terminalCollection.get(i).toString());
-            System.out.println(super.terminalCollection.get(i).getParent());
-            System.out.println(super.terminalCollection.get(i).getParent().getParent());
-            System.out.println(super.terminalCollection.get(i).getParent().getParent().getParent());
-            int tempLowCost = super.terminalCollection.get(i).getCost();
+            int tempLowCost;
+            if (DEBUG) {
+                System.out.println(super.terminalCollection.get(i).toString());
+                System.out.println(super.terminalCollection.get(i).getParent());
+                System.out.println(super.terminalCollection.get(i).getParent().getParent());
+                System.out.println(super.terminalCollection.get(i).getParent().getParent().getParent());
+                tempLowCost = super.terminalCollection.get(i).getCost();
+            }
+            else {
+                super.terminalCollection.get(i).toString();
+                super.terminalCollection.get(i).getParent();
+                super.terminalCollection.get(i).getParent().getParent();
+                super.terminalCollection.get(i).getParent().getParent().getParent();
+                tempLowCost = super.terminalCollection.get(i).getCost();
+            }
+
             if (lowCost>tempLowCost) {
                 lowCost = tempLowCost;
                 lowi = i;
             }
 
-            System.out.println(super.terminalCollection.get(i).getCost());
-            System.out.println(i + " | " + lowCost);
+            if (DEBUG) {
+                System.out.println(super.terminalCollection.get(i).getCost());
+                System.out.println(i + " | " + lowCost);
+            }
+            else super.terminalCollection.get(i).getCost();
 
-
-
-            System.out.println("New Machine");
+            if(DEBUG) {
+                System.out.println("New Machine");
+            }
 
             String solution = "Solution " +
                     super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent().getParent().getParent().getParent() + "\u2081 " +
@@ -49,10 +63,16 @@ public class ScheduleTasks extends Schedule {
                     super.getTerminalCollection().get(lowi).getParent() + "\u2087 " +
                     super.getTerminalCollection().get(lowi) + "\u2088 " +
                     "Quality: " + super.getTerminalCollection().get(lowi).getCost();
-            Output.write(solution);
+            Output output = new Output(solution, getOutputFile());
         }
-
     }
 
+    public String getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(String outputFile) {
+        this.outputFile = outputFile;
+    }
 
 }

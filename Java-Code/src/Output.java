@@ -5,23 +5,40 @@ import java.nio.file.Paths;
 
 
 public class Output {
-    private final static String FILE_OUTPUT = "Output.txt";
+    private static String outFile;
 
-    public static void write(String str) throws IOException {
-
-        Path path = Paths.get(FILE_OUTPUT);
+    public Output(String str, String outputFile) throws IOException {
+        setOutFile(outputFile);
+        Path path = Paths.get(getOutFile());
         byte[] strToBytes = str.getBytes();
 
         Files.write(path, strToBytes);
     }
 
+    static String getOutFile() {
+        return outFile;
+    }
+
+    public void setOutFile(String outFile) {
+        Output.outFile = outFile;
+    }
 }
 
 class PartialAssignmentError extends RuntimeException {
 
-    public PartialAssignmentError(String message) throws IOException {
+    PartialAssignmentError(String message) throws IOException {
         super(message);
 
-        Output.write("partial assignment error");
+        Output output = new Output("partial assignment error", Output.getOutFile());
+    }
+}
+
+class RunTimeError extends RuntimeException {
+
+    RunTimeError(String message, String outputFile) throws  IOException {
+        super(message);
+
+        Output output = new Output("runtime error "+message,
+                outputFile);
     }
 }

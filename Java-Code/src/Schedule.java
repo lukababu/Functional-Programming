@@ -17,10 +17,10 @@ public class Schedule {
     private ArrayList<TooNearPenalty> tooNearPenalties = new ArrayList<TooNearPenalty>();
     public ArrayList<Node> terminalCollection = new ArrayList<Node>();
 
-    public Schedule(String pathname) throws IOException {
+    public Schedule(String inputFile, String outputFile) throws IOException {
 
         // Read file and put it into an array
-        File file = new File(pathname);
+        File file = new File(inputFile);
         ArrayList<String> stringBuffer = new ArrayList<String>();
         String line;
         try {
@@ -30,10 +30,13 @@ public class Schedule {
                 stringBuffer.add(line);
             }
             fileReader.close();
-            System.out.println("Contents of file:");
-            if (DEBUG)
+
+            if (DEBUG) {
+                System.out.println("Contents of file:");
                 for (String aString : stringBuffer)
                     System.out.println(aString);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -224,27 +227,29 @@ public class Schedule {
         }
 
         //Report
-        System.out.println("Report:");
-        System.out.println("Name: " + aName);
-        System.out.println("Partial Assignments: ");
-        for (MachineTaskPair a : partialAssignments) {
-            System.out.println("\t" + a.getMachine() + ", " + a.getTask());
-        }
-        System.out.println("Forbidden Machines: ");
-        for (MachineTaskPair a : forbiddenMachines) {
-            System.out.println("\t" + a.getMachine() + ", " + a.getTask());
-        }
-        System.out.println("Too Near Tasks: ");
-        for (TaskTaskPair a : tooNearTasks) {
-            System.out.println("\t" + a.getTask1() + ", " + a.getTask2());
-        }
-        System.out.println("Machine Penalties: ");
-        for (int[] a : machinePenalties) {
-            System.out.println("\t" + a[0] + ", " + a[1]);
-        }
-        System.out.println("Too Near Penalties: ");
-        for (TooNearPenalty a : tooNearPenalties) {
-            System.out.println("\t" + a.getTask1() + ", " + a.getTask2() + ", " + a.getPenalty());
+        if (DEBUG) {
+            System.out.println("Report:");
+            System.out.println("Name: " + aName);
+            System.out.println("Partial Assignments: ");
+            for (MachineTaskPair a : partialAssignments) {
+                System.out.println("\t" + a.getMachine() + ", " + a.getTask());
+            }
+            System.out.println("Forbidden Machines: ");
+            for (MachineTaskPair a : forbiddenMachines) {
+                System.out.println("\t" + a.getMachine() + ", " + a.getTask());
+            }
+            System.out.println("Too Near Tasks: ");
+            for (TaskTaskPair a : tooNearTasks) {
+                System.out.println("\t" + a.getTask1() + ", " + a.getTask2());
+            }
+            System.out.println("Machine Penalties: ");
+            for (int[] a : machinePenalties) {
+                System.out.println("\t" + a[0] + ", " + a[1]);
+            }
+            System.out.println("Too Near Penalties: ");
+            for (TooNearPenalty a : tooNearPenalties) {
+                System.out.println("\t" + a.getTask1() + ", " + a.getTask2() + ", " + a.getPenalty());
+            }
         }
     }
 
@@ -441,9 +446,6 @@ public class Schedule {
                     }
                 }
 
-
-
-
                 if (DEBUG) {
                     System.out.println("Cost: " + cost +
                                         " Temp Penalty " + tempPenalty +
@@ -454,8 +456,6 @@ public class Schedule {
 
                 children.add(aNode);
             }
-
-
 
         }
 
