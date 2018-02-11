@@ -41,11 +41,16 @@ public class Schedule {
             e.printStackTrace();
         }
 
+        String[] inputs = new String[]{"Name:", "forced partial assignment:", "forbidden machine:", "too-near tasks:",
+                "machine penalties:", "too-near penalties:"};
+        Boolean[] inputsAccepted = new Boolean[]{false, false, false, false, false, false};
         // Process the buffer
         for (int i = 0; i < stringBuffer.size(); ) {
             String currentString = stringBuffer.get(i);
+
             switch (currentString) {
                 case "Name:":
+                    inputsAccepted[0] = true;
                     if (DEBUG)
                         System.out.println("Inputting name...");
                     i++;
@@ -63,6 +68,7 @@ public class Schedule {
                     i++;
                     break;
                 case "forced partial assignment:":
+                    inputsAccepted[1] = true;
                     if (DEBUG)
                         System.out.println("inputting forced partial assignments...");
                     i++;
@@ -115,6 +121,7 @@ public class Schedule {
                     }
                     break;
                 case "forbidden machine:":
+                    inputsAccepted[2] = true;
                     if (DEBUG)
                         System.out.println("forbidden machines...");
                     i++;
@@ -135,6 +142,7 @@ public class Schedule {
                     }
                     break;
                 case "too-near tasks:":
+                    inputsAccepted[3] = true;
                     if (DEBUG)
                         System.out.println("too-near tasks...");
                     i++;
@@ -155,6 +163,7 @@ public class Schedule {
                     }
                     break;
                 case "machine penalties:":
+                    inputsAccepted[4] = true;
                     if (DEBUG)
                         System.out.println("machines penalties...");
                     i++;
@@ -188,6 +197,7 @@ public class Schedule {
                     }
                     break;
                 case "too-near penalties:":
+                    inputsAccepted[5] = true;
                     if (DEBUG)
                         System.out.println("too-near penalties...");
                     i++;
@@ -224,6 +234,12 @@ public class Schedule {
                         System.out.println("Empty Line");
                     i++;
             }
+        }
+        for (int x = 0; x<6; x++) {
+            if (DEBUG) System.out.println(" " + inputsAccepted[x]);
+            if (!inputsAccepted[x])
+                throw new RunTimeError("Error while parsing input file at condition: \"" + inputs[x]+"\"",
+                        outputFile);
         }
 
         //Report
