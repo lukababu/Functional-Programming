@@ -87,28 +87,28 @@ public class Schedule {
 
                         // Check if there is an invalid machine
                         int machineNum = Integer.valueOf(values[0]);
-                        if (machineNum > 8 || machineNum < 1) throw new PartialAssignmentError("" +
-                                "partial assignment error: Invalid machine");
+                        if (machineNum > 8 || machineNum < 1) throw new Output.PartialAssignmentError("" +
+                                "partial assignment error: Invalid machine", outputFile);
 
                         // Check if there is an invalid task
                         int taskNum = toIntNumber(values[1]);
                         if (taskNum > 8 || taskNum < 1)
-                            throw new PartialAssignmentError("" +
-                                    "partial assignment error: Invalid task" + taskNum);
+                            throw new Output.PartialAssignmentError("" +
+                                    "partial assignment error: Invalid task" + taskNum, outputFile);
 
 
                         // Check if there is duplicate machine, and throw an error
                         if (availableMach[Integer.valueOf(values[0])-1])
                             availableMach[Integer.valueOf(values[0])-1] = false;
-                        else throw new PartialAssignmentError("" +
-                                "partial assignment error: duplicate machine");
+                        else throw new Output.PartialAssignmentError("" +
+                                "partial assignment error: duplicate machine", outputFile);
 
 
                         // Check if there is duplicate task, and throw an error
                         if (availableTask[toIntNumber(values[1])-1])
                             availableTask[toIntNumber(values[1])-1] = false;
                         else {
-                            throw new PartialAssignmentError("partial assignment error: duplicate task");
+                            throw new Output.PartialAssignmentError("partial assignment error: duplicate task", outputFile);
                         }
 
                         MachineTaskPair mtp = new MachineTaskPair(Integer.valueOf(values[0]), toIntNumber(values[1]));
@@ -229,15 +229,19 @@ public class Schedule {
                     }
                     break;
                 default:
-                    if (DEBUG)
-                        System.out.println("Empty Line");
-                    i++;
+                    if (currentString.equals("")) {
+                        if (DEBUG) System.out.println("Empty Line");
+                        i++;
+                    }
+                    else throw new Output.RunTimeError("incorrect input at line | " +currentString,
+                            outputFile);
+
             }
         }
         for (int x = 0; x<6; x++) {
             if (DEBUG) System.out.println(" " + inputsAccepted[x]);
             if (!inputsAccepted[x])
-                throw new RunTimeError("Error while parsing input file at condition: \"" + inputs[x]+"\"",
+                throw new Output.RunTimeError("Error while parsing input file at condition: \"" + inputs[x]+"\"",
                         outputFile);
         }
 

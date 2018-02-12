@@ -18,7 +18,7 @@ public class Driver {
                 inputFile = args[0];
                 outputFile = args[1];
             } catch (Exception e) {
-                throw new RunTimeError("Incorrect input " + e, OUTPUT_FILE);
+                throw new Output.RunTimeError("Incorrect input " + e, OUTPUT_FILE);
             }
         }
 

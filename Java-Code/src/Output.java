@@ -22,23 +22,24 @@ public class Output {
     public void setOutFile(String outFile) {
         Output.outFile = outFile;
     }
-}
 
-class PartialAssignmentError extends RuntimeException {
 
-    PartialAssignmentError(String message) throws IOException {
-        super(message);
+    static class PartialAssignmentError extends RuntimeException {
 
-        Output output = new Output("partial assignment error", Output.getOutFile());
+        PartialAssignmentError(String message, String outputFile) throws IOException {
+            super(message);
+
+            Output output = new Output("partial assignment error", outputFile);
+        }
     }
-}
 
-class RunTimeError extends RuntimeException {
+    static class RunTimeError extends RuntimeException {
 
-    RunTimeError(String message, String outputFile) throws  IOException {
-        super(message);
+        RunTimeError(String message, String outputFile) throws IOException {
+            super(message);
 
-        Output output = new Output("Runtime Error:" + message,
-                outputFile);
+            Output output = new Output("Runtime Error:" + message,
+                    outputFile);
+        }
     }
 }
