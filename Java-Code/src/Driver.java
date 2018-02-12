@@ -9,7 +9,7 @@ public class Driver {
         String inputFile;
         String outputFile;
 
-        if (DEBUG) {
+        if (DEBUG || args[0].equals("DEBUG")) {
             inputFile = INPUT_FILE;
             outputFile = OUTPUT_FILE;
         }

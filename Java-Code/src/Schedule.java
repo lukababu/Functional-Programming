@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Schedule {
@@ -42,7 +41,7 @@ public class Schedule {
         }
 
         String[] inputs = new String[]{"Name:", "forced partial assignment:", "forbidden machine:", "too-near tasks:",
-                "machine penalties:", "too-near penalties:"};
+                "machine penalties:", "too-near penalities"};
         Boolean[] inputsAccepted = new Boolean[]{false, false, false, false, false, false};
         // Process the buffer
         for (int i = 0; i < stringBuffer.size(); ) {
@@ -196,10 +195,10 @@ public class Schedule {
                         return;
                     }
                     break;
-                case "too-near penalties:":
+                case "too-near penalities":
                     inputsAccepted[5] = true;
                     if (DEBUG)
-                        System.out.println("too-near penalties...");
+                        System.out.println("too-near penalities...");
                     i++;
                     if (i < stringBuffer.size())
                         currentString = stringBuffer.get(i);

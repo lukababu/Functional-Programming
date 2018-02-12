@@ -38,7 +38,7 @@ class RunTimeError extends RuntimeException {
     RunTimeError(String message, String outputFile) throws  IOException {
         super(message);
 
-        Output output = new Output("runtime error "+message,
+        Output output = new Output("Runtime Error:" + message,
                 outputFile);
     }
 }
