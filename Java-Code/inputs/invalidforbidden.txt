@@ -1,17 +1,18 @@
 Name:
-wrongkeyword2
+invalidforbidden
 
 forced partial assignment:
-(1,A)
-(2,B)
-(3,C)
-(4,D)
-(5,E)
-(6,F)
-(7,G)
 
 forbidden machine:
-
+(1,A)
+(2,A)
+(3,A)
+(4,A)
+(5,A)
+(6,A)
+(7,A)
+(8,A)
+ 
 too-near tasks:
 
 machine penalties:

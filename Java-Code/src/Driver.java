@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.List;
 
 public class Driver {
     final static boolean DEBUG = Test.DEBUG;
@@ -12,6 +13,25 @@ public class Driver {
         if (DEBUG || args[0].equals("DEBUG")) {
             inputFile = INPUT_FILE;
             outputFile = OUTPUT_FILE;
+            Test test = new Test();
+            List<String> inputFiles = test.getResults();
+            for (int i = 0; i < inputFiles.size(); i++) {
+
+                while(true){
+                    try{
+                        // Code you want to execute that can throw an error£
+                        ScheduleTasks scheduleTasks = new ScheduleTasks(
+                                test.filePath+"\\"+inputFiles.get(i),
+                                "outputs\\"+inputFiles.get(i));
+                        scheduleTasks.optimalSolution();
+                        break;
+                    }
+                    catch(Exception e){
+                        // Exception logic (such as showing a message) or just printing the trace (but this doesn't help a user)
+                        break;
+                    }
+                }
+            }
         }
         else {
             try {
@@ -20,12 +40,11 @@ public class Driver {
             } catch (Exception e) {
                 throw new Output.RunTimeError("Incorrect input " + e, OUTPUT_FILE);
             }
+            ScheduleTasks scheduleTasks = new ScheduleTasks(inputFile, outputFile);
+            scheduleTasks.optimalSolution();
         }
 
         System.out.println("Working...");
-        ScheduleTasks scheduleTasks = new ScheduleTasks(inputFile, outputFile);
-        scheduleTasks.optimalSolution();
-
     }
 }
 
