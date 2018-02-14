@@ -4,15 +4,17 @@ import java.util.List;
 
 public class Test {
     public static final boolean DEBUG = true;
-    public static final String filePath =
-            "C:\\Users\\a\\IdeaProjects\\Functional-Programming\\Java-Code\\inputs";
+    public static final String inputFilePath =
+            "Java-Code\\inputs\\";
+    public static final String outputFilePath =
+            "Java-Code\\outputs\\";
     private List<String> results;
 
 
     public Test() {
         List<String> tempResults = new ArrayList<String>();
 
-        File folder = new File(filePath);
+        File folder = new File(inputFilePath);
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
