@@ -410,11 +410,11 @@ public class Schedule {
             return level;
         }
         /*
-         *Returns the array up to the point it is called
+         *Getter for task of the given node
          */
-        public int[] path(int[] path, int level){
+        public int getTask(){
 
-            return path;
+            return task;
         }
         public void genChildren(){
             if (level!=0) {
