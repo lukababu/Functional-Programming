@@ -45,21 +45,20 @@ class ScheduleTasks extends Schedule {
                 System.out.println("New Machine");
             }
 
-            String solution = "Solution " +
-                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent().getParent().getParent().getParent() + "\u2081 " +
-                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent().getParent().getParent() + "\u2082 " +
-                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent().getParent() + "\u2083 " +
-                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent() + "\u2084 " +
-                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent() + "\u2085 " +
-                    super.getTerminalCollection().get(lowi).getParent().getParent()+ "\u2086 " +
-                    super.getTerminalCollection().get(lowi).getParent() + "\u2087 " +
-                    super.getTerminalCollection().get(lowi) + "\u2088 " +
-                    "Quality: " + super.getTerminalCollection().get(lowi).getCost();
-
-            Output output = new Output(solution, getOutputFile());
+            Output output = new Output(
+                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent().getParent().getParent().getParent().toString(),
+                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent().getParent().getParent().toString(),
+                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent().getParent().toString(),
+                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().getParent().toString(),
+                    super.getTerminalCollection().get(lowi).getParent().getParent().getParent().toString(),
+                    super.getTerminalCollection().get(lowi).getParent().getParent().toString(),
+                    super.getTerminalCollection().get(lowi).getParent().toString(),
+                    super.getTerminalCollection().get(lowi).toString(),
+                    super.getTerminalCollection().get(lowi).getCost(),
+                    getOutputFile());
         }
         if (terminalCollection.size() == 0) {
-            throw new Output.NoSolution("", outputFile);
+            throw new Output.NoValidSolution("", outputFile);
         }
     }
 

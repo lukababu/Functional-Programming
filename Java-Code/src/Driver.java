@@ -6,6 +6,8 @@ public class Driver {
         String inputFile;
         String outputFile;
 
+        System.out.println("Working...");
+
         if (Test.DEBUG || args[0].equals("DEBUG")) {
             Test test = new Test();
             List<String> inputFiles = test.getResults();
@@ -26,8 +28,7 @@ public class Driver {
                     }
                 }
             }
-
-            // Check Solution correctness
+            test.checkResults();
         }
         else {
             try {
@@ -40,8 +41,6 @@ public class Driver {
             ScheduleTasks scheduleTasks = new ScheduleTasks(inputFile, outputFile);
             scheduleTasks.optimalSolution();
         }
-
-        System.out.println("Working...");
     }
 }
 

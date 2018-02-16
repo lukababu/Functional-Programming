@@ -6,17 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule {
-    final static boolean DEBUG = Test.DEBUG;
-
     private String aName;
     private ArrayList<MachineTaskPair> partialAssignments = new ArrayList<MachineTaskPair>();
     private ArrayList<MachineTaskPair> forbiddenMachines = new ArrayList<MachineTaskPair>();
     private ArrayList<TaskTaskPair> tooNearTasks = new ArrayList<TaskTaskPair>();
     private int[][] machinePenalties = new int[8][8];
     private ArrayList<TooNearPenalty> tooNearPenalties = new ArrayList<TooNearPenalty>();
-    public ArrayList<Node> terminalCollection = new ArrayList<Node>();
+    ArrayList<Node> terminalCollection = new ArrayList<Node>();
 
-    public Schedule(String inputFile, String outputFile) throws IOException {
+    Schedule(String inputFile, String outputFile) throws IOException {
 
         // Read file and put it into an array
         File file = new File(inputFile);
@@ -30,7 +28,7 @@ public class Schedule {
             }
             fileReader.close();
 
-            if (DEBUG) {
+            if (Test.DEBUG) {
                 System.out.println("Contents of file:");
                 for (String aString : stringBuffer)
                     System.out.println(aString);
@@ -50,13 +48,13 @@ public class Schedule {
             switch (currentString) {
                 case "Name:":
                     inputsAccepted[0] = true;
-                    if (DEBUG)
+                    if (Test.DEBUG)
                         System.out.println("Inputting name...");
                     i++;
                     currentString = stringBuffer.get(i);
 
                     if (currentString.length() != 0) {
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("name set to: " + currentString);
                         aName = (currentString);
                     } else {
@@ -68,7 +66,7 @@ public class Schedule {
                     break;
                 case "forced partial assignment:":
                     inputsAccepted[1] = true;
-                    if (DEBUG)
+                    if (Test.DEBUG)
                         System.out.println("inputting forced partial assignments...");
                     i++;
                     currentString = stringBuffer.get(i);
@@ -76,31 +74,31 @@ public class Schedule {
                     boolean[] availableMach = new boolean[]{true, true, true, true, true, true, true, true};
                     boolean[] availableTask = new boolean[]{true, true, true, true, true, true, true, true};
                     while (currentString.length() != 0) {
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("Current string:" + currentString);
                         String newString = currentString.substring(1, currentString.length() - 1);
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("New string: " + newString);
                         String[] values = newString.split(",");
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("Spitted: " + values[0] + " " + values[1]);
 
                         // Check if there is an invalid machine
                         int machineNum = Integer.valueOf(values[0]);
-                        if (machineNum > 8 || machineNum < 1) throw new Output.PartialAssignmentError("" +
-                                "partial assignment error: Invalid machine", outputFile);
+                        if (machineNum > 8 || machineNum < 1)
+                            throw new Output.InvalidMachineTask("", outputFile);
 
                         // Check if there is an invalid task
                         int taskNum = toIntNumber(values[1]);
                         if (taskNum > 8 || taskNum < 1)
-                            throw new Output.PartialAssignmentError("" +
-                                    "partial assignment error: Invalid task" + taskNum, outputFile);
+                            throw new Output.InvalidMachineTask("", outputFile);
 
 
                         // Check if there is duplicate machine, and throw an error
                         if (availableMach[Integer.valueOf(values[0])-1])
                             availableMach[Integer.valueOf(values[0])-1] = false;
-                        else throw new Output.PartialAssignmentError("" +
+                        else
+                            throw new Output.PartialAssignmentError("" +
                                 "partial assignment error: duplicate machine", outputFile);
 
 
@@ -121,19 +119,21 @@ public class Schedule {
                     break;
                 case "forbidden machine:":
                     inputsAccepted[2] = true;
-                    if (DEBUG)
+                    if (Test.DEBUG)
                         System.out.println("forbidden machines...");
                     i++;
                     currentString = stringBuffer.get(i);
-                    while (currentString.length() != 0) {
-                        if (DEBUG)
+                    while (currentString.length() > 1) {
+                        if (Test.DEBUG)
                             System.out.println("Current string:" + currentString);
                         String newString = currentString.substring(1, currentString.length() - 1);
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("New string: " + newString);
                         String[] values = newString.split(",");
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("Splitted: " + values[0] + " " + values[1]);
+                        if (toIntNumber(values[1]) == -1)
+                            throw new Output.InvalidMachineTask("", outputFile);
                         MachineTaskPair mtp = new MachineTaskPair(Integer.valueOf(values[0]), toIntNumber(values[1]));
                         forbiddenMachines.add(mtp);
                         i++;
@@ -142,19 +142,21 @@ public class Schedule {
                     break;
                 case "too-near tasks:":
                     inputsAccepted[3] = true;
-                    if (DEBUG)
+                    if (Test.DEBUG)
                         System.out.println("too-near tasks...");
                     i++;
                     currentString = stringBuffer.get(i);
-                    while (currentString.length() != 0) {
-                        if (DEBUG)
+                    while (currentString.length() > 1) {
+                        if (Test.DEBUG)
                             System.out.println("Current string:" + currentString);
                         String newString = currentString.substring(1, currentString.length() - 1);
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("New string: " + newString);
                         String[] values = newString.split(",");
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("Splitted: " + values[0] + " " + values[1]);
+                        if (toIntNumber(values[1]) == -1)
+                            throw new Output.RunTimeError("Incorrect task", outputFile);
                         TaskTaskPair ttp = new TaskTaskPair(toIntNumber(values[0]), toIntNumber(values[1]));
                         tooNearTasks.add(ttp);
                         i++;
@@ -163,90 +165,107 @@ public class Schedule {
                     break;
                 case "machine penalties:":
                     inputsAccepted[4] = true;
-                    if (DEBUG)
+                    if (Test.DEBUG)
                         System.out.println("machines penalties...");
+
                     i++;
                     currentString = stringBuffer.get(i);
                     int offset = 0;
+
                     while (currentString.length() != 0) {
-                        if (DEBUG)
+
+                        if (Test.DEBUG)
                             System.out.println("Offset: " + offset);
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("Current string:" + currentString);
                         String[] values = currentString.split(" ");
+                        if (offset >= 8)
+                            throw new Output.MachinePenaltyError("", outputFile);
 
                         if (values.length == 8) {
-                            if (DEBUG)
-                                System.out.println("Splitted: " + values[0] + " " + values[1] + " " + values[2] + " " + values[3] + " " + values[4] + " " + values[5] + " " + values[6] + " " + values[7]);
+                            if (Test.DEBUG)
+                                System.out.println(
+                                        "Splitted: " + values[0] + " " + values[1] + " " + values[2] + " " + values[3] + " " + values[4] + " " + values[5] + " " + values[6] + " " + values[7]);
                             int[] numbers = new int[8];
                             for (int j = 0; j < 8; j++) {
-                                numbers[j] = Integer.parseInt(values[j]);
+                                try {
+                                    numbers[j] = Integer.parseInt(values[j]);
+                                }
+                                catch(NumberFormatException ex) {
+                                    throw new Output.InvalidPenalty("", outputFile);
+                                }
                             }
                             machinePenalties[offset] = numbers;
-                        } else {
-                            System.out.println("Invalid Machine Penalty Size (Horizontal) at: " + offset + 1);
                         }
-                        offset++;
+                        else
+                            throw new Output.MachinePenaltyError("", outputFile);
+
                         i++;
                         currentString = stringBuffer.get(i);
+                        offset++;
                     }
-                    if (offset != 8) {
-                        System.out.println("Invalid Machine Penalty Size (Vertical)");
-                        return;
-                    }
+
                     break;
                 case "too-near penalities":
                     inputsAccepted[5] = true;
-                    if (DEBUG)
+                    if (Test.DEBUG)
                         System.out.println("too-near penalities...");
                     i++;
                     if (i < stringBuffer.size())
                         currentString = stringBuffer.get(i);
                     else {
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("End of the file");
                         break;
                     }
                     while (currentString.length() != 0) {
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("Current string:" + currentString);
                         String newString = currentString.substring(1, currentString.length() - 1);
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("New string: " + newString);
                         String[] values = newString.split(",");
-                        if (DEBUG)
+                        if (Test.DEBUG)
                             System.out.println("Splitted: " + values[0] + " " + values[1] + " " + values[2]);
+                        if ((toIntNumber(values[0]) == toIntNumber(values[1])) || toIntNumber(values[0]) == -1 || toIntNumber(values[1]) == -1)
+                            throw new Output.InvalidTask("", outputFile);
+                        try {
+                            Integer.parseInt(values[2]);
+                        } catch(NumberFormatException ex) {
+                            throw new Output.InvalidPenalty("", outputFile);
+                        }
+
                         TooNearPenalty tnp = new TooNearPenalty(toIntNumber(values[0]), toIntNumber(values[1]), Integer.valueOf(values[2]));
                         tooNearPenalties.add(tnp);
                         i++;
                         if (i < stringBuffer.size())
                             currentString = stringBuffer.get(i);
                         else {
-                            if (DEBUG)
+                            if (Test.DEBUG)
                                 System.out.println("End of the file");
                             break;
                         }
                     }
                     break;
                 default:
-                    if (currentString.equals("")) {
-                        if (DEBUG) System.out.println("Empty Line");
+                    if (currentString.equals("") || currentString.equals(" ")) {
+                        if (Test.DEBUG) System.out.println("Empty Line");
                         i++;
                     }
-                    else throw new Output.RunTimeError("incorrect input at line | " +currentString,
-                            outputFile);
+                    else
+                        throw new Output.ParsingInputFile("", outputFile);
 
             }
         }
         for (int x = 0; x<6; x++) {
-            if (DEBUG) System.out.println(" " + inputsAccepted[x]);
+            if (Test.DEBUG) System.out.println(" " + inputsAccepted[x]);
             if (!inputsAccepted[x])
                 throw new Output.RunTimeError("Error while parsing input file at condition: \"" + inputs[x]+"\"",
                         outputFile);
         }
 
         //Report
-        if (DEBUG) {
+        if (Test.DEBUG) {
             System.out.println("Report:");
             System.out.println("Name: " + aName);
             System.out.println("Partial Assignments: ");
@@ -298,37 +317,13 @@ public class Schedule {
         return 'Z';
     }
 
-    public String getaName() {
+    String getaName() {
         return aName;
     }
 
-    public ArrayList<MachineTaskPair> getPartialAssignments() {
-        return partialAssignments;
-    }
-
-    public ArrayList<MachineTaskPair> getForbiddenMachines() {
-        return forbiddenMachines;
-    }
-
-    public ArrayList<TaskTaskPair> getTooNearTasks() {
-        return tooNearTasks;
-    }
-
-    public int[][] getMachinePenalties() {
-        return machinePenalties;
-    }
-
-    public ArrayList<TooNearPenalty> getTooNearPenalties() {
-        return tooNearPenalties;
-    }
-
-    public ArrayList<Node> getTerminalCollection() {return terminalCollection; }
+    ArrayList<Node> getTerminalCollection() {return terminalCollection; }
 
     class Node {
-
-
-        final static boolean DEBUG = Test.DEBUG;
-
         private Node parent;
         private int cost;
         private int level;
@@ -338,12 +333,12 @@ public class Schedule {
         }
 
         private List<Node> children = new ArrayList<Node>(); 			//Does this need to have its type changed?
-        public List<Integer> currentSet;
+        List<Integer> currentSet;
         private int task;
         /**
          * The null node, used as the level 0/starting point of the tree
          */
-        public Node() {
+        Node() {
             System.out.println();
             this.level = 0;
             this.cost = 0;
@@ -373,7 +368,7 @@ public class Schedule {
             this.currentSet = new ArrayList<Integer>(currentSet);
             this.level = level;
             this.cost = cost;
-            if (DEBUG) System.out.println("Machine: " + level + " Task: " + task);
+            if (Test.DEBUG) System.out.println("Machine: " + level + " Task: " + task);
             genChildren();
             if (this.level==8){
                 terminalCollection.add(this);
@@ -383,40 +378,31 @@ public class Schedule {
                     if ((task == tooNearPenalties.get(j).getTask1()) && (tempParent == tooNearPenalties.get(j).getTask2())) {
                         tempPenalty = tooNearPenalties.get(j).getPenalty();
                         break;
-                    }else if((task == tooNearPenalties.get(j).getTask2()) && (tempParent == tooNearPenalties.get(j).getTask1())) {
+                    }
+                    else if((task == tooNearPenalties.get(j).getTask2()) && (tempParent == tooNearPenalties.get(j).getTask1())) {
                         tempPenalty = tooNearPenalties.get(j).getPenalty();
                         break;
-                    }else;
-                }this.cost = this.cost+tempPenalty;
+                    }
+                    else;
+                }
+                this.cost = this.cost+tempPenalty;
             }
         }
 
         /*
          * Getter for parent of the given node
          */
-        public Node getParent() {
+        Node getParent() {
             return parent;
         }
         /*
          * Getter for cost of the given node
          */
-        public int getCost() {
+        int getCost() {
             return cost;
         }
-        /*
-         * Getter for level of the given node
-         */
-        public int getLevel() {
-            return level;
-        }
-        /*
-         *Getter for task of the given node
-         */
-        public int getTask(){
 
-            return task;
-        }
-        public void genChildren(){
+        void genChildren(){
             if (level!=0) {
                 currentSet.remove((currentSet.indexOf(this.task)));
             }
@@ -425,7 +411,7 @@ public class Schedule {
             int assignTask = 0;
             for (int i=0; i<partialAssignments.size(); i++) {
                 if (level+1==partialAssignments.get(i).getMachine()) {
-                    if (DEBUG) System.out.println(i + " " + level);
+                    if (Test.DEBUG) System.out.println(i + " " + level);
                     assignTask = partialAssignments.get(i).getTask();
                     break;
                 }
@@ -468,19 +454,16 @@ public class Schedule {
                             tempPenalty = tooNearPenalties.get(j).getPenalty();
                             break;
                         }
-
-                        else if((task == tooNearPenalties.get(j).getTask2()) && (currentSet.get(i) == tooNearPenalties.get(j).getTask1())) {
-                            tempPenalty = tooNearPenalties.get(j).getPenalty();
-                            break;
+                        else {
+                            tempPenalty = 0;
                         }
-                        else;
                     }
                 }
 
-                if (DEBUG) {
+                if (Test.DEBUG) {
                     System.out.println("Cost: " + cost +
-                                        " Temp Penalty " + tempPenalty +
-                                        " Current: " + machinePenalties[level][currentSet.get(i)-1]);
+                            " Temp Penalty " + tempPenalty +
+                            " Current: " + machinePenalties[level][currentSet.get(i)-1]);
                 }
 
                 Node aNode = new Node(this, currentSet.get(i), currentSet, level+1, cost+tempPenalty+machinePenalties[level][currentSet.get(i)-1]);
@@ -488,6 +471,13 @@ public class Schedule {
                 children.add(aNode);
             }
 
+        }
+        /*
+         *Getter for task of the given node
+         */
+        public int getTask(){
+
+            return task;
         }
 
         public String toString() {
