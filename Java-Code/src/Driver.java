@@ -12,11 +12,11 @@ public class Driver {
 
             // Calculate and output solutions
             for (int i = 0; i < inputFiles.size(); i++) {
-                while(true){
+                while(true) {
                     try{
                         ScheduleTasks scheduleTasks = new ScheduleTasks(
-                                Test.inputFilePath +inputFiles.get(i),
-                                Test.outputFilePath +inputFiles.get(i)
+                                Test.inputFilePath + inputFiles.get(i),
+                                Test.outputFilePath + inputFiles.get(i)
                         );
                         scheduleTasks.optimalSolution();
                         break;
@@ -34,7 +34,8 @@ public class Driver {
                 inputFile = args[0];
                 outputFile = args[1];
             } catch (Exception e) {
-                throw new Output.RunTimeError("Incorrect input " + e, outputFile);
+                throw new Output.RunTimeError("Incorrect input " + e,
+                        "ErrorOutput.txt");
             }
             ScheduleTasks scheduleTasks = new ScheduleTasks(inputFile, outputFile);
             scheduleTasks.optimalSolution();
