@@ -167,19 +167,26 @@ public class Schedule {
                     inputsAccepted[4] = true;
                     if (Test.DEBUG)
                         System.out.println("machines penalties...");
+
                     i++;
                     currentString = stringBuffer.get(i);
                     int offset = 0;
+
                     while (currentString.length() != 0) {
+
                         if (Test.DEBUG)
                             System.out.println("Offset: " + offset);
                         if (Test.DEBUG)
                             System.out.println("Current string:" + currentString);
                         String[] values = currentString.split(" ");
+                        if (offset >= 8) {
+                            throw new Output.RunTimeError("Invalid Machine Penalty Size (Vertical)", outputFile);
+                        }
 
-                        if (values.length != 8) {
+                        if (values.length == 8) {
                             if (Test.DEBUG)
-                                System.out.println("Splitted: " + values[0] + " " + values[1] + " " + values[2] + " " + values[3] + " " + values[4] + " " + values[5] + " " + values[6] + " " + values[7]);
+                                System.out.println(
+                                        "Splitted: " + values[0] + " " + values[1] + " " + values[2] + " " + values[3] + " " + values[4] + " " + values[5] + " " + values[6] + " " + values[7]);
                             int[] numbers = new int[8];
                             for (int j = 0; j < 8; j++) {
                                 numbers[j] = Integer.parseInt(values[j]);
@@ -189,14 +196,12 @@ public class Schedule {
                             throw new Output.RunTimeError("Invalid Machine Penalty Size (Horizontal)",
                                     outputFile);
                         }
-                        offset++;
+
                         i++;
                         currentString = stringBuffer.get(i);
+                        offset++;
                     }
-                    if (offset != 8) {
-                        //System.out.println("Invalid Machine Penalty Size (Vertical)");
-                        throw new Output.RunTimeError("Invalid Machine Penalty Size (Vertical)", outputFile);
-                    }
+
                     break;
                 case "too-near penalities":
                     inputsAccepted[5] = true;
@@ -318,7 +323,7 @@ public class Schedule {
             return children;
         }
 
-        private List<Node> children = new ArrayList<Node>(); 			//Does this need to have its type changed?
+        private List<Node> children = new ArrayList<Node>();
         List<Integer> currentSet;
         private int task;
         /**
@@ -356,8 +361,26 @@ public class Schedule {
             this.cost = cost;
             if (Test.DEBUG) System.out.println("Machine: " + level + " Task: " + task);
             genChildren();
-            if (this.level==8)
+            if (this.level==8) {
                 terminalCollection.add(this);
+
+                int tempParent = getParent().getParent().getParent().getParent().getParent().getParent().getParent().getTask();
+                int tempPenalty = 0;
+                for (int j = 0; j < tooNearPenalties.size(); j++) {
+                    if ((task == tooNearPenalties.get(j).getTask1()) && (tempParent == tooNearPenalties.get(j).getTask2())) {
+                        tempPenalty = tooNearPenalties.get(j).getPenalty();
+                        break;
+                    }
+                    else if ((tempParent == tooNearPenalties.get(j).getTask2()) && (task == tooNearPenalties.get(j).getTask1())) {
+                        tempPenalty = tooNearPenalties.get(j).getPenalty();
+                        break;
+                    }
+                }
+                this.cost = this.cost + tempPenalty;
+            }
+        }
+        public int getTask() {
+            return task;
         }
 
         /*
