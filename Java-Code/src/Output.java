@@ -42,4 +42,14 @@ public class Output {
                     outputFile);
         }
     }
+
+    static class NoSolution extends RuntimeException {
+
+        NoSolution(String message, String outputFile) throws IOException {
+            super(message);
+
+            Output output = new Output("No Valid Solution Possible" + message,
+                    outputFile);
+        }
+    }
 }

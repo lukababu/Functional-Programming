@@ -177,7 +177,7 @@ public class Schedule {
                             System.out.println("Current string:" + currentString);
                         String[] values = currentString.split(" ");
 
-                        if (values.length == 8) {
+                        if (values.length != 8) {
                             if (Test.DEBUG)
                                 System.out.println("Splitted: " + values[0] + " " + values[1] + " " + values[2] + " " + values[3] + " " + values[4] + " " + values[5] + " " + values[6] + " " + values[7]);
                             int[] numbers = new int[8];
@@ -186,7 +186,8 @@ public class Schedule {
                             }
                             machinePenalties[offset] = numbers;
                         } else {
-                            throw new Output.RunTimeError("Invalid Machine Penalty Size (Vertical)", outputFile);
+                            throw new Output.RunTimeError("Invalid Machine Penalty Size (Horizontal)",
+                                    outputFile);
                         }
                         offset++;
                         i++;

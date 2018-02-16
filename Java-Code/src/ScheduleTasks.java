@@ -55,7 +55,11 @@ class ScheduleTasks extends Schedule {
                     super.getTerminalCollection().get(lowi).getParent() + "\u2087 " +
                     super.getTerminalCollection().get(lowi) + "\u2088 " +
                     "Quality: " + super.getTerminalCollection().get(lowi).getCost();
+
             Output output = new Output(solution, getOutputFile());
+        }
+        if (terminalCollection.size() == 0) {
+            throw new Output.NoSolution("", outputFile);
         }
     }
 
