@@ -375,8 +375,20 @@ public class Schedule {
             this.cost = cost;
             if (DEBUG) System.out.println("Machine: " + level + " Task: " + task);
             genChildren();
-            if (this.level==8)
+            if (this.level==8){
                 terminalCollection.add(this);
+                int tempParent = (getParent().getParent().getParent().getParent().getParent().getParent().getParent()).getTask();
+                int tempPenalty = 0;
+                for (int j=0;j<tooNearPenalties.size();j++) {
+                    if ((task == tooNearPenalties.get(j).getTask1()) && (tempParent == tooNearPenalties.get(j).getTask2())) {
+                        tempPenalty = tooNearPenalties.get(j).getPenalty();
+                        break;
+                    }else if((task == tooNearPenalties.get(j).getTask2()) && (tempParent == tooNearPenalties.get(j).getTask1())) {
+                        tempPenalty = tooNearPenalties.get(j).getPenalty();
+                        break;
+                    }else;
+                }this.cost = this.cost+tempPenalty;
+            }
         }
 
         /*
