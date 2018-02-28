@@ -1,0 +1,6 @@
+Get File I/O first
+--Parse correctly
+
+Implement Algorithm
+
+Test Cases
