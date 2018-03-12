@@ -1,6 +1,27 @@
-Get File I/O first
---Parse correctly
-
+File I/O:
+  Completed: 
+    - System takes first argument as the input file and reads it correctly.
+  Incomplete:
+    - System needs to string the second argument from args and place it into an array
+    - System write to File
+    - Parsing Inpur file into a string
+    -Spliting string based on header.
+  
+Parse correctly
+  Incomplete:
+    -Parsing name
+    -Parsing partial forced
+    -Parsing forbidden assignments
+    -Parsing too near task
+    -Parsing machine penalties
+    -Parsing too near penalties
+    
 Implement Algorithm
+  Incomplete:
+    -Create a function such that it created every assignment, and add the parsing filter on to it
+    -Penalty cost calculations
 
 Test Cases
+  -list of test cases that succeed:
+  
+  -list of test cases that fail:
