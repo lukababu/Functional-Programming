@@ -14,7 +14,7 @@ main = do
     putStrLn "The head name is:"
     putStrLn (outfile args)
     view (infile args)
-    view (outfile args)
+    view (tail args)
 
 --Prints the given filename to console
 view :: [String] -> IO ()  
