@@ -1,11 +1,12 @@
 File I/O:
   Completed: 
     - System takes first argument as the input file and reads it correctly.
+    - System needs to strip the second argument from args and correctly uses is as the name for the outfile
+    - System writes to File
+    - Parsing Input file into a string. Input file is stored as a string in the variable contents.
   Incomplete:
-    - System needs to string the second argument from args and place it into an array
-    - System write to File
-    - Parsing Inpur file into a string
-    -Spliting string based on header.
+    - Spliting string based on header.
+    - get the final result to in a string and write it to file. 
   
 Parse correctly
   Incomplete:
@@ -20,6 +21,7 @@ Implement Algorithm
   Incomplete:
     -Create a function such that it created every assignment, and add the parsing filter on to it
     -Penalty cost calculations
+    -store the final result in a string variable
 
 Test Cases
   -list of test cases that succeed:
