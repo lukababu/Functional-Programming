@@ -3,8 +3,9 @@ File I/O:
     - System takes first argument as the input file and reads it correctly.
     - System needs to strip the second argument from args and correctly uses is as the name for the outfile
     - System writes to File
-    - Parsing Input file into a string. Input file is stored as a string in the variable contents.
   Incomplete:
+    - New read instance
+    - Parsing Input file into a string. Input file is stored as a string in the variable contents.
     - Spliting string based on header.
     - get the final result to in a string and write it to file. 
   
