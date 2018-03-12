@@ -15,6 +15,10 @@ main = do
     putStrLn (outfile args)
     view (infile args)
     --view (tail args) This code was for test purposes only. Test: Passed
+    --Stores BBBCCC in aaa
+    --writes BBBCCC into the file name that is passed as arg2
+    let aaa  = "BBB" ++ "CCC"
+    writeFile (last args) aaa --Works correctly
 
 --Prints the given filename to console
 view :: [String] -> IO ()  
