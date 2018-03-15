@@ -20,10 +20,12 @@ Parse correctly
     -Parsing partial forced - ensures partial forced follows (M,T)(is a tuple and follow machine task conventions)
     -Parsing forbidden assignments - ensures forbidden follows is a tuple and follow machine and task conventions
     -Parsing too near task - ensure it is a tuple, follows task task convention
+    -Parsing too near task - not sure if we need to implement an error check for case such as (A,A) added this too
+    -Parsing machine penalties - ensures it is 8  by 8
+    -Parsing too near penalties - the case such as (A, A, 3) and making sure its a 3-tuple
   Incomplete 
-    -Parsing too near task - not sure if we need to implement an error check for case such as (A,A)
-    -Parsing machine penalties
-    -Parsing too near penalties
+    -Unsure if the matrix has a character, are we supposed to take care of it? I don't know how
+    -Parsing too near penalties this case is left to implement:(A, B, C)
     
 Implement Algorithm
   Incomplete:
