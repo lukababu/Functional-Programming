@@ -41,3 +41,4 @@ Test Cases
     
     http://hackage.haskell.org/package/base-4.10.1.0/docs/src/Data.OldList.html#permutations
   -list of test cases that fail:
+    Wrong machine number
