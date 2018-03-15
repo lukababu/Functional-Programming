@@ -35,5 +35,6 @@ Implement Algorithm
 
 Test Cases
   -list of test cases that succeed:
-  
+    garbage.txt
+    wrongtooneartask.txt 
   -list of test cases that fail:
