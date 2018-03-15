@@ -3,8 +3,7 @@
 
 -- 	Library functions for parsing	
 --         Note that this is not a monadic approach to parsing.	
---                                                                       
---         (c) Simon Thompson, 1995,1998.					
+--                                                                       		
 --                   
 
 module ParseLib where
@@ -27,10 +26,10 @@ noCR (x:xs) | x == '\r' = noCR xs
 noCR []   = []
 
 -- deletes whitespace strings from a list of strings
-noWhitespaceLines :: [String] -> [String]
-noWhitespaceLines [] = []
-noWhitespaceLines (x:xs) | noEndSpaces x  == "" = noWhitespaceLines xs
-                         | otherwise = x:(noWhitespaceLines xs)
+delWhitespaceLines :: [String] -> [String]
+delWhitespaceLines [] = []
+delWhitespaceLines (x:xs) | noEndSpaces x  == "" = delWhitespaceLines xs
+                         | otherwise = x:(delWhitespaceLines xs)
 
 noEndSpaces :: String -> String
 noEndSpaces []  = []
