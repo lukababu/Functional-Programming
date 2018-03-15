@@ -38,4 +38,6 @@ Test Cases
   -list of test cases that succeed:
     garbage.txt
     wrongtooneartask.txt 
+    
+    http://hackage.haskell.org/package/base-4.10.1.0/docs/src/Data.OldList.html#permutations
   -list of test cases that fail:
