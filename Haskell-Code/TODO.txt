@@ -4,17 +4,24 @@ File I/O:
     - System needs to strip the second argument from args and correctly uses is as the name for the outfile
     - System writes to File
     - Spliting string based on header.
-  Incomplete
+    - Function to convert machine and task to in has been implemented.
     - Parsing Input file into a string. Input file is stored as a string in the variable contents.
-    - Converting Strings to Int where required
+    - result for spelling parse error, not a tuple, invalid (M,T) and (T,T) error prints to file 
+  Incomplete
+    - Converting Strings to Int where required - Fucntions are done, just need the algorithm 
+      fucntion to know where you want it converted, how you want it passed.
     - get the final result to in a string and write it to file. 
+        - This needs to be done for the algorithm that computes the result.
+        - And for no solution cases.
   
 Parse correctly
-  Incomplete
-    -Parsing name
-    -Parsing partial forced
-    -Parsing forbidden assignments
-    -Parsing too near task
+  Complete
+    -Parsing name - Checks if name is entered on in one line, if not it s garbage.
+    -Parsing partial forced - ensures partial forced follows (M,T)(is a tuple and follow machine task conventions)
+    -Parsing forbidden assignments - ensures forbidden follows is a tuple and follow machine and task conventions
+    -Parsing too near task - ensure it is a tuple, follows task task convention
+  Incomplete 
+    -Parsing too near task - not sure if we need to implement an error check for case such as (A,A)
     -Parsing machine penalties
     -Parsing too near penalties
     
