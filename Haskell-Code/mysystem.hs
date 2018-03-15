@@ -47,5 +47,69 @@ main = do
     then do writeFile (last args) "Error while parsing input file"
             exitSuccess
     else return()
+    --After name, we want to formats of the rest.
+    --First we need to ensure the input is a 2-tuple.
+    if(anding (map twotup(delWhitespaceLines forcedSec)))
+    then return()
+    else do writeFile (last args) "invalid machine/task - not a 2-tuple forced"
+            exitSuccess
+ 
+    --Now we can check that forced assignments is actually a valid machine and task pair
+    if (anding(map validMTPair(delWhitespaceLines forcedSec)))
+    then return()
+    else do writeFile (last args) "Invalid Machine/Task pair - 1"
+            exitSuccess
+
+    --Ensure forbidden machines are a 2-tuple.
+    if(anding (map twotup(delWhitespaceLines forbidSec)))
+    then return()
+    else do writeFile (last args) "invalid machine/task - not a 2-tuple forbid"
+            exitSuccess
+
+    --Ensure too near task is a 2-tuple
+    if(anding (map twotup(delWhitespaceLines tntSec)))
+    then return()
+    else do writeFile (last args) "invalid machine/task - not a 2-tuple too near task"
+            exitSuccess
+
+    --Ensures too near penalty is a 3-tuple
+    if(anding (map tuple3(delWhitespaceLines tnpSec)))
+    then return()
+    else do writeFile (last args) "invalid machine/task - not a 3-tuple too near p"
+            exitSuccess
+
+    --Now we can check that forbidden assignments is actually a valid machine and task pair
+    if (anding(map validMTPair(delWhitespaceLines forbidSec)))
+    then return()
+    else do writeFile (last args) "Invalid Machine/Task pair - 2"
+            exitSuccess
+
+    --Now we check if the too near task is valid
+    if (anding(map validTNTPair(delWhitespaceLines tntSec)))
+    then return()
+    else do writeFile (last args) "Invalid Task/Task pair"
+            exitSuccess
+
+    --Ensure that the machine penalty is vertically of height 8
+    if(length(delWhitespaceLines machPenSec) /= 8)
+    then do writeFile (last args) "Machine Penalty Error"
+            exitSuccess 
+    else return()
+    
+    let machPen = map (map read) (map words (delWhitespaceLines machPenSec)) :: [[Int]]
+    --print machPen
+    --ensures that the penalty matrix has total elements of 64
+    if(sum(map length machPen)/= 64)
+    then do writeFile (last args) "Machine Penalty Error"
+            exitSuccess 
+    else return()
+    
+    --Now we can check that forbidden assignments is actually a valid machine and task pair
+    if (anding(map validTTtrip(delWhitespaceLines tnpSec)))
+    then return()
+    else do writeFile (last args) "Invalid task"
+            exitSuccess
+    
+
     --let aaa  = "BBB" ++ "CCC"
     --writeFile (last args) (unlines nameSec)
