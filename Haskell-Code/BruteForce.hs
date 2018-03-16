@@ -1,5 +1,7 @@
 module BruteForce where
 
+import Data.List  
+import Data.String
 
 -- [[Penalty list]] -> [Forced Partial Assignment] -> [Forbidden Machine] -> [Too-near] -> [Too-near penalities]
 getAssignment :: [[Int]] -> [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> String
