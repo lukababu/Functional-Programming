@@ -37,8 +37,13 @@ Implement Algorithm
 Test Cases
   -list of test cases that succeed:
     garbage.txt
-    wrongtooneartask.txt 
+    wrongtooneartask.txt
+    wrongmachine.txt
+    wrongtask.txt
+    wrongmachpenalty1.txt
+    wrongmachpenalty2.txt
     
     http://hackage.haskell.org/package/base-4.10.1.0/docs/src/Data.OldList.html#permutations
   -list of test cases that fail:
-    Wrong machine number
+    Wrongmachinenumber.txt
+    wrongpenaltyAssignment.txt
