@@ -6,6 +6,7 @@ import Data.List
 import Data.String
 import System.Exit
 import ParseLib
+import BruteForce
 
 --The main method will take in command line arguments and read file into a string. 
 -- to execute ./filename arg1 arg2
