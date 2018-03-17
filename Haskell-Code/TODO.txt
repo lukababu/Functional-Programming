@@ -42,8 +42,10 @@ Test Cases
     wrongtask.txt
     wrongmachpenalty1.txt
     wrongmachpenalty2.txt
+    wrongpartialassignment.txt
+    Wrongmachinenumber.txt
+    wrongkeyword2.txt
     
     http://hackage.haskell.org/package/base-4.10.1.0/docs/src/Data.OldList.html#permutations
   -list of test cases that fail:
-    Wrongmachinenumber.txt
-    wrongpenaltyAssignment.txt
+    wrongmachinenumber.txt
