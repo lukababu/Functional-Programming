@@ -153,3 +153,16 @@ validTNTPair ('(':s:',':t:')':[]) | isTask s, isTask t = True && s /= t
 validTNTPair(x) = False
 
 --isInt :: Char -> Bool
+
+-- returns true if a list has duplicate values
+duplicates :: (Eq a) => [a] -> Bool
+duplicates [] = False
+duplicates (x:xs) | (elem x xs) = True
+                  | otherwise = duplicates xs
+
+-- parses a [(task,task),...] into an [(int,int),...]
+parseTT :: [String] -> [(Int,Int)]
+parseTT []  = []
+parseTT (('(':a:',':b:')':[]):xs) = ((convertMac a,convertTask b):(parseTT xs))
+parseTT x = []
+
