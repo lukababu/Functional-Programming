@@ -60,6 +60,13 @@ main = do
     then return()
     else do writeFile (last args) "Invalid Machine/Task pair - 1"
             exitSuccess
+            
+     -- look for duplicates
+    let forced = parseTT(delWhitespaceLines forcedSec)
+    if ((duplicates(map fst forced)) || (duplicates(map snd forced)))
+    then do writeFile (last args) "partial assignment error"
+            exitSuccess
+    else return ()
 
     --Ensure forbidden machines are a 2-tuple.
     if(anding (map twotup(delWhitespaceLines forbidSec)))
