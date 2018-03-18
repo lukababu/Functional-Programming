@@ -13,6 +13,7 @@ import Control.Monad
 import System.Directory  
 import Data.List  
 import Data.String
+import Data.Char
 import System.Exit
 
 
@@ -166,3 +167,15 @@ parseTT []  = []
 parseTT (('(':a:',':b:')':[]):xs) = ((convertMac a,convertTask b):(parseTT xs))
 parseTT x = []
 
+-- parses a [(mach,task),...] into an [(int,int),...]
+parseMT :: [String] -> [(Int,Int)]
+parseMT [] = []
+parseMT (('(':a:',':b:')':[]):xs) = ((convertMac a,convertTask b):(parseMT xs))
+parseMT x = []
+
+
+-- parses a string into an (int,int,int) triple
+parseTTx :: [String] -> [(Int,Int,Int)]
+parseTTx [] = []
+parseTTx (('(':a:',':b:',':c:')':[]):xs) = ((convertTask a,convertTask b,ord c):(parseTTx xs))
+parseTTx x = []

@@ -7,8 +7,8 @@ getEmptyList :: [[Int]]
 getEmptyList = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
 
 -- [[Penalty list]] -> [Forced Partial Assignment] -> [Forbidden Machine] -> [Too-near tasks] -> [Too-near penalities]
-getAssignment :: [[Int]] -> [(Int, Int)] -> [(Int, Int)] -> String
-getAssignment array fpa fm tnt tnp = solutionSetTNT tnt (solutionSetFPA fpa (solutionSet fm []))
+getAssignment :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [[Int]]
+getAssignment fpa fm tnt = solutionSetTNT tnt (solutionSetFPA fpa (solutionSet fm []))
 
 -- Generate all possible solutions
 allPossibilities :: [[Int]]
