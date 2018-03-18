@@ -143,7 +143,7 @@ validMTPair(x) = False
 
 validTTtrip :: String -> Bool
 validTTtrip [] = False
-validTTtrip ('(':m:',':t:',':xs) | isMachine m,isTask t  = True
+validTTtrip ('(':m:',':t:',':xs) | isTask m,isTask t  = True
                                  | otherwise = False
 validTTtrip(x) = False
 
