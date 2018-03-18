@@ -6,10 +6,17 @@ import Data.String
 getEmptyList :: [[Int]]
 getEmptyList = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
 
--- [[Penalty list]] -> [Forced Partial Assignment] -> [Forbidden Machine] -> [Too-near tasks] -> [Too-near penalities]
-getAssignment :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [[Int]]
-getAssignment fpa fm tnt = solutionSetTNT tnt (solutionSetFPA fpa (solutionSet fm []))
+-- [Forced Partial Assignment] -> [Forbidden Machine] -> [Too-near tasks]
+calculateSolutions :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [[Int]]
+calculateSolutions fpa fma tnt = solutionSetTNT tnt (solutionSetFPA fpa (solutionSet fma []))
 
+{-
+-- Solution List -> Penalty Table -> Too Near Penalty -> Solutions with quality
+calculatePenalty :: [[Int]] -> [(Int,Int,Int,Int,Int,Int,Int,Int)] -> [(Int,Int,Int)] -> [[Int]]
+calculatePenalty (sol:sols) pen tnp
+    | [] _ _ = []
+    |     
+-}
 -- Generate all possible solutions
 allPossibilities :: [[Int]]
 allPossibilities = permutations [0..7]
@@ -86,3 +93,10 @@ solutionSetTNT [] list = list
 solutionSetTNT [x] list = proccessTNT x list
 solutionSetTNT (x:xs) list = solutionSetTNT xs $ proccessTNT x list
 
+{-
+-- Takes the set of conditions and parses the solution set 
+solutionSet :: [(Int, Int)] -> [[Int]] -> [[Int]]
+solutionSetTNT [] list = list
+solutionSetTNT [x] list = proccessTNT x list
+solutionSetTNT (x:xs) list = solutionSetTNT xs $ proccessTNT x list
+-}

@@ -114,13 +114,9 @@ main = do
             exitSuccess
 
     --putStr forcedSec
-    writeFile (last args) (processIO (parseMT forcedSec) (parseMT forbidSec) (parseTT tntSec) machPenSec (parseTTx tnpSec))
-    
+    writeFile (last args) (processIO (parseMT forcedSec) (parseMT forbidSec) (parseTT tntSec) (parsePen machPenSec) (parseTTx tnpSec))
 
 -- FPA, FM, TNT, Pen, TNP
-processIO :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [a] -> [(Int,Int,Int)] -> String
+processIO :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [(Int,Int,Int,Int,Int,Int,Int,Int)] -> [(Int,Int,Int)] -> String
 --processIO fpa _ _ _ _ = "Yup"
-processIO fpa fma tnt pen tnp = show (getAssignment fpa fma tnt)
-
---processFPA :: [a] -> [(Int, Int)]
---processFPA
+processIO fpa fma tnt pen tnp = show (calculateSolutions fpa fma tnt)
