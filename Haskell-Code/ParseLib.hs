@@ -179,3 +179,8 @@ parseTTx :: [String] -> [(Int,Int,Int)]
 parseTTx [] = []
 parseTTx (('(':a:',':b:',':c:')':[]):xs) = ((convertTask a,convertTask b,ord c):(parseTTx xs))
 parseTTx x = []
+
+parsePen :: [String] -> [(Int,Int,Int,Int,Int,Int,Int,Int)]
+parsePen [] = []
+parsePen ((a:' ':b:' ':c:' ':d:' ':e:' ':f:' ':g:' ':h:[]):xs) = ((ord a,ord b,ord c,ord d,ord e,ord f,ord g,ord h):(parsePen xs))
+parsePen x = []
