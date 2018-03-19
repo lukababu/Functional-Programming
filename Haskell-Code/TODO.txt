@@ -7,9 +7,9 @@ File I/O:
     - Function to convert machine and task to in has been implemented.
     - Parsing Input file into a string. Input file is stored as a string in the variable contents.
     - result for spelling parse error, not a tuple, invalid (M,T) and (T,T) error prints to file 
-  Incomplete
     - Converting Strings to Int where required - Fucntions are done, just need the algorithm 
       fucntion to know where you want it converted, how you want it passed.
+  Incomplete
     - get the final result to in a string and write it to file. 
         - This needs to be done for the algorithm that computes the result.
         - And for no solution cases.
