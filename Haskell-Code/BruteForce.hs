@@ -7,9 +7,11 @@ import ParseLib
 getEmptyList :: [(Int,Int,Int,Int,Int,Int,Int,Int)]
 getEmptyList = [(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0)]
 
+{-
 -- [Forced Partial Assignment] -> [Forbidden Machine] -> [Too-near tasks]
 calculateSolutions :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [[Int]]
-calculateSolutions fpa fma tnt = solutionSetTNT tnt (solutionSetFPA fpa (solutionSet fma []))
+calculateSolutions fpa fma tnt = solutionSetTNT tnt $ (solutionSetFPA fpa (solutionSet fma []))
+-}
 
 penalty :: Int -> Int -> [(Int,Int,Int,Int,Int,Int,Int,Int)] -> Int
 penalty _ _ [] = 0
@@ -33,7 +35,7 @@ solutionParse i list = list!!i
 calculatePenalty :: [(Int,Int,Int,Int,Int,Int,Int,Int)] -> [[Int]] -> [[Int]]
 calculatePenalty _ [] = [ ] 
 calculatePenalty table (x:xs) = (x ++ [quality]): calculatePenalty table xs
- where quality = ((penalty 0 (solutionParse 0 x) table)-48) + ((penalty 1 (solutionParse 1 x) table)-48) + ((penalty 2 (solutionParse 2 x) table)-48) + ((penalty 3 (solutionParse 3 x) table)-48) + ((penalty 4 (solutionParse 4 x) table)-48) + ((penalty 5 (solutionParse 5 x) table)-48) + ((penalty 6 (solutionParse 6 x) table)-48) + ((penalty 7 (solutionParse 7 x) table)-48)
+ where quality = ((penalty 0 (solutionParse 0 x) table)) + ((penalty 1 (solutionParse 1 x) table)) + ((penalty 2 (solutionParse 2 x) table)) + ((penalty 3 (solutionParse 3 x) table)) + ((penalty 4 (solutionParse 4 x) table)) + ((penalty 5 (solutionParse 5 x) table)) + ((penalty 6 (solutionParse 6 x) table)) + ((penalty 7 (solutionParse 7 x) table))
 
 -- Generate all possible solutions
 allPossibilities :: [[Int]]
@@ -52,7 +54,6 @@ proccessFPA (a, b) (x:xs)
     | a == 6 && b == x!!6 = x: proccessFPA (a, b) xs
     | a == 7 && b == x!!7 = x: proccessFPA (a, b) xs
     | otherwise = proccessFPA (a, b) xs
---proccessFPA (a, b) ( _ :xs) = [1]: proccessFPA (a, b) xs
 
 -- Removes solutions with forbidden machine
 proccessFM :: (Int, Int) -> [[Int]] -> [[Int]]
@@ -67,20 +68,21 @@ proccessFM (a, b) (x:xs)
     | a == 6 && b == x!!6 = proccessFM (a, b) xs
     | a == 7 && b == x!!7 = proccessFM (a, b) xs
     | otherwise = x: proccessFM (a, b) xs
---proccessFM (a, b) ( _ :xs) = [1]: proccessFM (a, b) xs
 
 -- Too near penalities
 proccessTNT :: (Int, Int) -> [[Int]] -> [[Int]]
 proccessTNT _ [] = [ ]
 proccessTNT (a, b) (x:xs)
-    | (a == x!!0) && (b == (x!!1)) = proccessTNT (a, b) xs
-    | (a == x!!1) && (b == (x!!2)) = proccessTNT (a, b) xs
-    | (a == x!!2) && (b == (x!!3)) = proccessTNT (a, b) xs
-    | (a == x!!3) && (b == (x!!4)) = proccessTNT (a, b) xs
-    | (a == x!!4) && (b == (x!!5)) = proccessTNT (a, b) xs
-    | (a == x!!5) && (b == (x!!6)) = proccessTNT (a, b) xs
-    | (a == x!!6) && (b == (x!!7)) = proccessTNT (a, b) xs 
-    | (a == x!!7) && (b == (x!!0)) = proccessTNT (a, b) xs 
+    | a == x!!0 && b == x!!1 = proccessTNT (a, b) xs
+    | a == x!!1 && b == x!!2 = proccessTNT (a, b) xs
+    | a == x!!2 && b == x!!3 = proccessTNT (a, b) xs
+    | a == x!!3 && b == x!!4 = proccessTNT (a, b) xs
+    | a == x!!4 && b == x!!5 = proccessTNT (a, b) xs
+    | a == x!!5 && b == x!!6 = proccessTNT (a, b) xs
+    | a == x!!6 && b == x!!7 = proccessTNT (a, b) xs 
+    | a == x!!7 && b == x!!0 = proccessTNT (a, b) xs 
+    --reverse block
+    {-
     | (a == x!!1) && (b == (x!!0)) = proccessTNT (a, b) xs
     | (a == x!!2) && (b == (x!!1)) = proccessTNT (a, b) xs
     | (a == x!!3) && (b == (x!!2)) = proccessTNT (a, b) xs
@@ -88,7 +90,7 @@ proccessTNT (a, b) (x:xs)
     | (a == x!!5) && (b == (x!!4)) = proccessTNT (a, b) xs
     | (a == x!!6) && (b == (x!!5)) = proccessTNT (a, b) xs
     | (a == x!!7) && (b == (x!!6)) = proccessTNT (a, b) xs
-    | (a == x!!0) && (b == (x!!7)) = proccessTNT (a, b) xs
+    | (a == x!!0) && (b == (x!!7)) = proccessTNT (a, b) xs-}
     | otherwise = x: proccessTNT (a, b) xs
 
 -- | Replaces an element in a list with a new element. -- | The list -- | Index of the element to replace. -- | The new element. -- | The updated list.
@@ -101,15 +103,16 @@ replaceElement xs i x = fore ++ (x : aft)
 proccessTTx :: (Int, Int, Int) -> [[Int]] -> [[Int]]
 proccessTTx _ [] = [ ]
 proccessTTx (a, b, c) (x:xs)
-    | (a == x!!0) && (b == (x!!1)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
-    | (a == x!!1) && (b == (x!!2)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
-    | (a == x!!2) && (b == (x!!3)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
-    | (a == x!!3) && (b == (x!!4)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
-    | (a == x!!4) && (b == (x!!5)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
-    | (a == x!!5) && (b == (x!!6)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
-    | (a == x!!6) && (b == (x!!7)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
-    | (a == x!!7) && (b == (x!!0)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    | (a == x!!0) && (b == (x!!1)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!1) && (b == (x!!2)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!2) && (b == (x!!3)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!3) && (b == (x!!4)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!4) && (b == (x!!5)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!5) && (b == (x!!6)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!6) && (b == (x!!7)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!7) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
     --reverse block 
+    {-
     | (a == x!!1) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
     | (a == x!!2) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
     | (a == x!!3) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
@@ -117,7 +120,7 @@ proccessTTx (a, b, c) (x:xs)
     | (a == x!!5) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
     | (a == x!!6) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
     | (a == x!!7) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
-    | (a == x!!0) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!0) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs-}
     | otherwise = x : proccessTTx (a, b, c) xs
 
 -- Takes the set of conditions and parses the solution set 
@@ -129,19 +132,21 @@ solutionSet (x:xs) list = solutionSet xs $ proccessFM x list
 
 -- Takes the set of conditions and parses the solution set 
 solutionSetFPA :: [(Int, Int)] -> [[Int]] -> [[Int]]
-solutionSetFPA fm [] = solutionSetFPA fm allPossibilities
+solutionSetFPA _ [] = []
 solutionSetFPA [] list = list
 solutionSetFPA [x] list = proccessFPA x list
 solutionSetFPA (x:xs) list = solutionSetFPA xs $ proccessFPA x list
 
 -- Takes the set of conditions and parses the solution set 
 solutionSetTNT :: [(Int, Int)] -> [[Int]] -> [[Int]]
+solutionSetTNT _ [] = []
 solutionSetTNT [] list = list
 solutionSetTNT [x] list = proccessTNT x list
 solutionSetTNT (x:xs) list = solutionSetTNT xs $ proccessTNT x list
 
 -- Takes the set of conditions and parses the solution set 
 solutionSetTTx :: [(Int, Int, Int)] -> [[Int]] -> [[Int]]
+solutionSetTTx _ [] = []
 solutionSetTTx [] list = list
 solutionSetTTx [x] list = proccessTTx x list
 solutionSetTTx (x:xs) list = solutionSetTTx xs $ proccessTTx x list

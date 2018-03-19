@@ -52,7 +52,7 @@ main = do
             exitSuccess
             
     -- look for duplicates
-    let forced = parseTT(delWhitespaceLines forcedSec)
+    let forced = parseMT(delWhitespaceLines forcedSec)
     if ((duplicates(map fst forced)) || (duplicates(map snd forced)))
     then do writeFile (last args) "partial assignment error"
             exitSuccess
@@ -108,9 +108,22 @@ main = do
     else do writeFile (last args) "invalid task"
             exitSuccess
 
+    let forcedPartial = parseMT forcedSec
+    let forcedMachine = parseMT forbidSec
+    let tooNearTask = parseTT (delWhitespaceLines tntSec)
+    let penaltyTable = toToupleArray machPen
+    let tooNearPenalty = parseTTx tnpSec
+    
+    let solve1 = solutionSet forcedMachine []
+    let solve2 = solutionSetFPA forcedPartial solve1
+    let solve3 = solutionSetTNT tooNearTask solve2
+    
+    let solve4 = calculatePenalty penaltyTable solve3
+    let solve5 = solutionSetTTx tooNearPenalty solve4
+    let solve6 = minim solve5
     --putStr forcedSec
-    writeFile (last args) (processIO (parseMT forcedSec) (parseMT forbidSec) (parseTT tntSec) (parsePen machPenSec) (parseTTx tnpSec))
-
+    writeFile (last args) (show solve6)
+{-    
 -- FPA, FM, TNT, Pen, TNP
 processIO :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [(Int,Int,Int,Int,Int,Int,Int,Int)] -> [(Int,Int,Int)] -> String
-processIO fpa fma tnt pen tnp = solution (minim (solutionSetTTx tnp (calculatePenalty pen (calculateSolutions fpa fma tnt))))
+processIO fpa fma tnt pen tnp = show (solutionSetTNT tnt (calculatePenalty pen (calculateSolutions fpa fma tnt)))-}

@@ -111,6 +111,7 @@ convertTask t  | t == 'A' = 0
                | t == 'F' = 5
                | t == 'G' = 6
                | t == 'H' = 7
+               | otherwise = -1
 
 --Checks if machine is a valid machine
 isMachine :: Char -> Bool
@@ -134,6 +135,7 @@ convertMac m  | m == '1' = 0
               | m == '6' = 5
               | m == '7' = 6
               | m == '8' = 7
+              | otherwise = -1
 
 validMTPair :: String -> Bool
 validMTPair [] = False
@@ -164,7 +166,7 @@ duplicates (x:xs) | (elem x xs) = True
 -- parses a [(task,task),...] into an [(int,int),...]
 parseTT :: [String] -> [(Int,Int)]
 parseTT []  = []
-parseTT (('(':a:',':b:')':[]):xs) = ((convertMac a,convertTask b):(parseTT xs))
+parseTT (('(':a:',':b:')':[]):xs) = ((convertTask a,convertTask b):(parseTT xs))
 parseTT x = []
 
 -- parses a [(mach,task),...] into an [(int,int),...]
@@ -177,20 +179,18 @@ parseMT x = []
 -- parses a string into an (int,int,int) triple
 parseTTx :: [String] -> [(Int,Int,Int)]
 parseTTx [] = []
-parseTTx (('(':a:',':b:',':c:')':[]):xs) = ((convertTask a,convertTask b,ord c):(parseTTx xs))
+parseTTx (('(':a:',':b:',':c:')':[]):xs) = ((convertTask a,convertTask b,(ord c - 48)):(parseTTx xs))
 parseTTx x = []
 
-parsePen :: [String] -> [(Int,Int,Int,Int,Int,Int,Int,Int)]
-parsePen [] = []
-parsePen ((a:' ':b:' ':c:' ':d:' ':e:' ':f:' ':g:' ':h:[]):xs) = ((ord a,ord b,ord c,ord d,ord e,ord f,ord g,ord h):(parsePen xs))
-parsePen x = []
+toToupleArray :: [[Int]] -> [(Int,Int,Int,Int,Int,Int,Int,Int)]
+toToupleArray (x:xs) = ((x!!0),(x!!1),(x!!2),(x!!3),(x!!4),(x!!5),(x!!6),(x!!7)) : toToupleArray xs
 
 tasktoChar :: Int -> [Char]
 tasktoChar t
     | t == 0 = "A"
-    | t == 1 = "B" 
-    | t == 2 = "C" 
-    | t == 3 = "D" 
+    | t == 1 = "B"
+    | t == 2 = "C"
+    | t == 3 = "D"
     | t == 4 = "E"
     | t == 5 = "F"
     | t == 6 = "G"
