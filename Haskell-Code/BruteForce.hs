@@ -163,4 +163,5 @@ min' a b
     | a!!8 == b!!8 = a
     
 solution :: [Int] -> String
+solution [] = "No valid solution possible!"
 solution list = "Solution " ++ (tasktoChar (list!!0)) ++ " " ++ (tasktoChar (list!!1)) ++ " " ++ (tasktoChar (list!!2)) ++ " " ++ (tasktoChar (list!!3)) ++ " " ++ (tasktoChar (list!!4)) ++ " " ++ (tasktoChar (list!!5)) ++ " " ++ (tasktoChar (list!!6)) ++ " " ++ (tasktoChar (list!!7)) ++ "; Quality: " ++ show (list!!8)

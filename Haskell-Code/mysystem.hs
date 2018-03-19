@@ -1,8 +1,11 @@
 import System.Environment
-import System.IO  
-import Control.Monad  
-import System.Directory  
-import Data.List  
+import System.IO
+import Control.Exception
+import Control.DeepSeq (force,NFData)
+import Control.Exception (try,SomeException)
+import Control.Monad
+import System.Directory
+import Data.List
 import Data.String
 import System.Exit
 import ParseLib
@@ -10,6 +13,29 @@ import BruteForce
 
 --The main method will take in command line arguments and read file into a string. 
 -- to execute ./filename arg1 arg2
+properMachinePenalty :: [String] -> [Bool]
+properMachinePenalty [] = [False]
+properMachinePenalty (x:xs)
+    | elem '.' x = True : properMachinePenalty xs
+    | elem ',' x = True : properMachinePenalty xs
+    | elem '!' x = True : properMachinePenalty xs
+    | elem '?' x = True : properMachinePenalty xs
+    | elem '@' x = True : properMachinePenalty xs
+    | elem '#' x = True : properMachinePenalty xs
+    | elem '%' x = True : properMachinePenalty xs
+    | elem '^' x = True : properMachinePenalty xs
+    | elem '&' x = True : properMachinePenalty xs
+    | elem '(' x = True : properMachinePenalty xs
+    | elem ')' x = True : properMachinePenalty xs
+    | elem '|' x = True : properMachinePenalty xs
+    | elem '\\' x = True : properMachinePenalty xs
+    | elem '`' x = True : properMachinePenalty xs
+    | elem '~' x = True : properMachinePenalty xs
+    | elem '/' x = True : properMachinePenalty xs
+    | otherwise = False : properMachinePenalty xs
+
+isValid :: [Bool] -> Bool
+isValid x = elem True x
 
 main = do
     args <- getArgs
@@ -23,7 +49,6 @@ main = do
         tntSec = sliced "too-near tasks:" "machine penalties:" filecontent
         machPenSec = sliced "machine penalties:" "too-near penalities" filecontent
         tnpSec = sliced "too-near penalities" "" filecontent
-    
     --Now that we have each part of the code sliced from section to section
     --We have to check if the spellings are correct for all the sections
     --If the spellings are incorrectly, the string tokens passed as arguments earlier won't be found 
@@ -94,7 +119,13 @@ main = do
             exitSuccess 
     else return()
     
-    let machPen = map (map read) (map words (delWhitespaceLines machPenSec)) :: [[Int]]
+    --Ensure that the machine penalty is vertically of height 8
+    if(isValid (properMachinePenalty machPenSec))
+    then do writeFile (last args) "invalid penalty"
+            exitSuccess 
+    else return()
+
+    let machPen =  (map (map read) (map words (delWhitespaceLines machPenSec)) :: [[Int]])
     --print machPen
     --ensures that the penalty matrix has total elements of 64
     if(sum(map length machPen)/= 64)
@@ -122,8 +153,4 @@ main = do
     let solve5 = solutionSetTTx tooNearPenalty solve4
     let solve6 = minim solve5
     --putStr forcedSec
-    writeFile (last args) (show solve6)
-{-    
--- FPA, FM, TNT, Pen, TNP
-processIO :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [(Int,Int,Int,Int,Int,Int,Int,Int)] -> [(Int,Int,Int)] -> String
-processIO fpa fma tnt pen tnp = show (solutionSetTNT tnt (calculatePenalty pen (calculateSolutions fpa fma tnt)))-}
+    writeFile (last args) (solution  solve6)
