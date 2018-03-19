@@ -118,3 +118,4 @@ main = do
 
 -- FPA, FM, TNT, Pen, TNP
 processIO :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [(Int,Int,Int,Int,Int,Int,Int,Int)] -> [(Int,Int,Int)] -> String
+processIO fpa fma tnt pen tnp = solution (minim (solutionSetTTx tnp (calculatePenalty pen (calculateSolutions fpa fma tnt))))
