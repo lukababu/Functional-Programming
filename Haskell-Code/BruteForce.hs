@@ -2,6 +2,7 @@ module BruteForce where
 
 import Data.List
 import Data.String
+import ParseLib
 
 getEmptyList :: [(Int,Int,Int,Int,Int,Int,Int,Int)]
 getEmptyList = [(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0)]
@@ -90,6 +91,35 @@ proccessTNT (a, b) (x:xs)
     | (a == x!!0) && (b == (x!!7)) = proccessTNT (a, b) xs
     | otherwise = x: proccessTNT (a, b) xs
 
+-- | Replaces an element in a list with a new element. -- | The list -- | Index of the element to replace. -- | The new element. -- | The updated list.
+replaceElement :: [a] -> Int -> a -> [a]
+replaceElement xs i x = fore ++ (x : aft)
+  where fore = take i xs
+        aft = drop (i+1) xs
+
+-- Too near Penalty Calculations
+proccessTTx :: (Int, Int, Int) -> [[Int]] -> [[Int]]
+proccessTTx _ [] = [ ]
+proccessTTx (a, b, c) (x:xs)
+    | (a == x!!0) && (b == (x!!1)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    | (a == x!!1) && (b == (x!!2)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    | (a == x!!2) && (b == (x!!3)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    | (a == x!!3) && (b == (x!!4)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    | (a == x!!4) && (b == (x!!5)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    | (a == x!!5) && (b == (x!!6)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    | (a == x!!6) && (b == (x!!7)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    | (a == x!!7) && (b == (x!!0)) = replaceElement x 8 (c + x!!8 - 48): proccessTTx (a, b, c) xs
+    --reverse block 
+    | (a == x!!1) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!2) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!3) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!4) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!5) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!6) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!7) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | (a == x!!0) && (b == (x!!0)) = replaceElement x 8 (c + x!!8): proccessTTx (a, b, c) xs
+    | otherwise = x : proccessTTx (a, b, c) xs
+
 -- Takes the set of conditions and parses the solution set 
 solutionSet :: [(Int, Int)] -> [[Int]] -> [[Int]]
 solutionSet fm [] = solutionSet fm allPossibilities
@@ -110,15 +140,22 @@ solutionSetTNT [] list = list
 solutionSetTNT [x] list = proccessTNT x list
 solutionSetTNT (x:xs) list = solutionSetTNT xs $ proccessTNT x list
 
---Takes the matrix and the [position] return an element in the matrix.
-getMachPen:: [[Int]] -> [Int] -> Int
-getMachPen i j
-        |null j == True                 = -1
-        |otherwise                      = i!!(j!!0)!!(j!!1)
-{-
 -- Takes the set of conditions and parses the solution set 
-solutionSet :: [(Int, Int)] -> [[Int]] -> [[Int]]
-solutionSetTNT [] list = list
-solutionSetTNT [x] list = proccessTNT x list
-solutionSetTNT (x:xs) list = solutionSetTNT xs $ proccessTNT x list
--}
+solutionSetTTx :: [(Int, Int, Int)] -> [[Int]] -> [[Int]]
+solutionSetTTx [] list = list
+solutionSetTTx [x] list = proccessTTx x list
+solutionSetTTx (x:xs) list = solutionSetTTx xs $ proccessTTx x list
+    
+minim :: [[Int]] -> [Int]
+minim []       = []
+minim [x]      = x
+minim (x:xs)   = min' x (minim xs)
+
+min' :: [Int] -> [Int] -> [Int]
+min' a b
+    | a!!8 > b!!8  = b
+    | a!!8 < b!!8  = a
+    | a!!8 == b!!8 = a
+    
+solution :: [Int] -> String
+solution list = "Solution " ++ (tasktoChar (list!!0)) ++ " " ++ (tasktoChar (list!!1)) ++ " " ++ (tasktoChar (list!!2)) ++ " " ++ (tasktoChar (list!!3)) ++ " " ++ (tasktoChar (list!!4)) ++ " " ++ (tasktoChar (list!!5)) ++ " " ++ (tasktoChar (list!!6)) ++ " " ++ (tasktoChar (list!!7)) ++ "; Quality: " ++ show (list!!8)

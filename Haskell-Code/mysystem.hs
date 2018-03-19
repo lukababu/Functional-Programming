@@ -30,14 +30,10 @@ main = do
     --this will result in a creation of an empty string
     --Here we will check if the strings are empty or not
     --this returns "Error while parsing file" if the file does not have the correct input
-    --if (elem 0 (map length [nameSec, forcedSec, forcedSec, tnpSec, machPenSec, tnpSec]))
-    --then do writeFile (last args) "Error while parsing input file"
-    --        exitSuccess
-    --else return ()
-    if((firsthalf "Name:" filecontent)==filecontent)
+    if (elem 0 (map length [nameSec, forcedSec, forcedSec, tnpSec, machPenSec, tnpSec]))
     then do writeFile (last args) "Error while parsing input file"
             exitSuccess
-    else return()
+    else return ()
     
     --We have now checked for errors in spellings
     --Now we want to check for errors with inputs
@@ -48,11 +44,6 @@ main = do
     else return()
     
     --After name, we want to formats of the rest.
-    if((firsthalf "forced partial assignment:" filecontent)==filecontent)
-    then do writeFile (last args) "Error while parsing input file"
-            exitSuccess
-    else return()
-    
     --First we need to ensure the input is a 2-tuple.
     if(anding (map twotup(delWhitespaceLines forcedSec)))
     then return()
@@ -71,30 +62,12 @@ main = do
     then do writeFile (last args) "partial assignment error"
             exitSuccess
     else return ()
-    
-    --Spelling error for fobidden machine
-    if((firsthalf "forbidden machine:" filecontent)==filecontent)
-    then do writeFile (last args) "Error while parsing input file4"
-            exitSuccess
-    else return()
 
     --Ensure forbidden machines are a 2-tuple.
     if(anding (map twotup(delWhitespaceLines forbidSec)))
     then return()
     else do writeFile (last args) "invalid machine/task"
             exitSuccess
-    
-    --Now we can check that forbidden assignments is actually a valid machine and task pair
-    if (anding(map validMTPair(delWhitespaceLines forbidSec)))
-    then return()
-    else do writeFile (last args) "invalid machine/task"
-            exitSuccess
-            
-    --Check too near task spelling
-    if((firsthalf "too-near tasks:" filecontent)==filecontent)
-    then do writeFile (last args) "Error while parsing input file"
-            exitSuccess
-    else return()
 
     --Ensure too near task is a 2-tuple
     if(anding (map twotup(delWhitespaceLines tntSec)))
@@ -108,17 +81,17 @@ main = do
     else do writeFile (last args) "invalid machine/task"
             exitSuccess
 
+    --Now we can check that forbidden assignments is actually a valid machine and task pair
+    if (anding(map validMTPair(delWhitespaceLines forbidSec)))
+    then return()
+    else do writeFile (last args) "invalid machine/task"
+            exitSuccess
+
     --Now we check if the too near task is valid
     if (anding(map validTNTPair(delWhitespaceLines tntSec)))
     then return()
     else do writeFile (last args) "invalid task"
             exitSuccess
-            
-    --Checks for the machine penalty spelling
-    if((firsthalf "machine penalties:" filecontent)==filecontent)
-    then do writeFile (last args) "Error while parsing input file2"
-            exitSuccess
-    else return()
 
     --Ensure that the machine penalty is vertically of height 8
     if(length(delWhitespaceLines machPenSec) /= 8)
@@ -134,12 +107,6 @@ main = do
             exitSuccess 
     else return()
     
-    --checks for too near penalities spelling
-    if((firsthalf "too-near penalities" filecontent)==filecontent)
-    then do writeFile (last args) "Error while parsing input file1"
-            exitSuccess
-    else return()
-    
     --Now we can check that forbidden assignments is actually a valid machine and task pair
     if (anding(map validTTtrip(delWhitespaceLines tnpSec)))
     then return()
@@ -151,5 +118,3 @@ main = do
 
 -- FPA, FM, TNT, Pen, TNP
 processIO :: [(Int, Int)] -> [(Int, Int)] -> [(Int, Int)] -> [(Int,Int,Int,Int,Int,Int,Int,Int)] -> [(Int,Int,Int)] -> String
---processIO fpa _ _ _ _ = "Yup"
-processIO fpa fma tnt pen tnp = show (calculateSolutions fpa fma tnt)

@@ -185,13 +185,14 @@ parsePen [] = []
 parsePen ((a:' ':b:' ':c:' ':d:' ':e:' ':f:' ':g:' ':h:[]):xs) = ((ord a,ord b,ord c,ord d,ord e,ord f,ord g,ord h):(parsePen xs))
 parsePen x = []
 
-tasktoChar :: Int -> Char
-convertTask t  | t == 0 = 'A'
-               | t == 1 = 'B' 
-               | t == 2 = 'C' 
-               | t == 3 = 'D' 
-               | t == 4 = 'E'
-               | t == 5 = 'F'
-               | t == 6 = 'G'
-               | t == 7 = 'H'
-               |otherwise = -1
+tasktoChar :: Int -> [Char]
+tasktoChar t
+    | t == 0 = "A"
+    | t == 1 = "B" 
+    | t == 2 = "C" 
+    | t == 3 = "D" 
+    | t == 4 = "E"
+    | t == 5 = "F"
+    | t == 6 = "G"
+    | t == 7 = "H"
+    | otherwise = "Z"
