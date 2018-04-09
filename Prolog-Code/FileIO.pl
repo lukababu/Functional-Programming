@@ -1,6 +1,11 @@
+:-dynamic(
+    content/1, 
+    error/1).
+
 /* Found this pice of code that allows to take command line input*/
 :- initialization(commandline).
 commandline :- argument_value(1, X), argument_value(2, Y), write(X), write(Y), write('\n'), main(X,Y).
+
 
 is_eof(FlHndl, CharCode, CurrentLine, FileAkku, FileContent) :-
         CharCode == -1,
@@ -28,12 +33,16 @@ read_loop(FlHndl, CurrentLine, FileAkku, FileContent) :-
         ; append_char(FlHndl, CharCode, CurrentLine, FileAkku, FileContent)).
 
 main(InputFile, OutputFile) :-
+    % retractall(content(_)),
     open(OutputFile, write, OS),
-    (   read_file(InputFile,InputLines),
-        member(Line, InputLines),
-        permutation([1,2,3], X),
-        write(X), nl,
-        write(OS,X),nl(OS),
+    (   read_file(InputFile,InputLines),!,
+        member(Lines, InputLines),
+        Tasks = [A,B,C,D,E,F,G,H], A#\=B+1, B=1,
+        fd_domain(Tasks, 1,8),!,
+        fd_all_different(Tasks),
+        fd_labeling(Tasks),
+        write(Tasks), nl,
+        write(OS,Tasks),nl(OS),
         false
         ;
         close(OS)
